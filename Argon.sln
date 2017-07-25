@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFontTest", "QuickFontTest\QuickFontTest.csproj", "{1FC07AF3-8737-4C58-85BF-7167F704D9D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Argon", "Argon\Argon.csproj", "{35CBCF29-11DB-4C82-9B11-00C4F71B56FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppArgon", "Argon\AppArgon.csproj", "{35CBCF29-11DB-4C82-9B11-00C4F71B56FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibArgon", "LibArgon\LibArgon.csproj", "{D399E05B-EB79-4442-A700-926BA3397ED5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{35CBCF29-11DB-4C82-9B11-00C4F71B56FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35CBCF29-11DB-4C82-9B11-00C4F71B56FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35CBCF29-11DB-4C82-9B11-00C4F71B56FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D399E05B-EB79-4442-A700-926BA3397ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D399E05B-EB79-4442-A700-926BA3397ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D399E05B-EB79-4442-A700-926BA3397ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D399E05B-EB79-4442-A700-926BA3397ED5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

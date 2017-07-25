@@ -7,7 +7,7 @@
     <ProjectGuid>{35CBCF29-11DB-4C82-9B11-00C4F71B56FC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ArtificialNature</RootNamespace>
-    <AssemblyName>Argon</AssemblyName>
+    <AssemblyName>AppArgon</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -53,51 +53,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource.cs" />
-    <Compile Include="Shader.cs" />
-    <Compile Include="ShaderProgram.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="VertexArray.cs" />
-    <Compile Include="VertexAttribute.cs" />
-    <Compile Include="VertexBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Fonts\Anonymous.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\BURNSTOW.TTF">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\Comfortaa-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\HappySans.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Fonts\times.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Shader\Default.vs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="woodenFont.qfont">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="freetype6.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Shader\Default.fs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="woodenFont.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\LibArgon\LibArgon.csproj">
+      <Project>{d399e05b-eb79-4442-a700-926ba3397ed5}</Project>
+      <Name>LibArgon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

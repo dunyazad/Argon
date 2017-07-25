@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArtificialNature
+namespace ArtificialNature.Core
 {
     class Singleton<T> where T : new()
     {
@@ -27,7 +27,7 @@ namespace ArtificialNature
     {
         Dictionary<string, T> cache = new Dictionary<string, T>();
 
-        public T Get(string name)
+        public virtual T Get(string name)
         {
             if (cache.ContainsKey(name))
             {
@@ -38,7 +38,7 @@ namespace ArtificialNature
                 return default(T);
             }
         }
-        public bool Set(string name, T t)
+        public virtual bool Set(string name, T t)
         {
             if (cache.ContainsKey(name))
             {
