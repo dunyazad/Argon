@@ -13,7 +13,7 @@ using QuickFont.Configuration;
 
 namespace ArtificialNature
 {
-    public class ANGeometry : ANComponent
+    public class ANGraphicsObject : ANComponent
     {
         List<ANMaterial> materials = new List<ANMaterial>();
 
@@ -21,7 +21,7 @@ namespace ArtificialNature
         ANGraphicsBuffer<Vector3> vboPosition;
         ANGraphicsBuffer<Vector4> vboColor;
 
-        public ANGeometry()
+        public ANGraphicsObject()
             : base()
         {
         }

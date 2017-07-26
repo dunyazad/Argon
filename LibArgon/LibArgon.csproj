@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\ANMaterial.cs" />
-    <Compile Include="Component\ANGeometry.cs" />
+    <Compile Include="Component\ANGraphicsObject.cs" />
     <Compile Include="Component\ANShader.cs" />
     <Compile Include="Component\ANGraphicsBuffer.cs" />
     <Compile Include="Core\ANComponent.cs" />
