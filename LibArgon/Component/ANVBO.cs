@@ -24,7 +24,7 @@ namespace ArtificialNature
         {
             GL.GenBuffers(1, out vbo);
 
-            AttributeID = GL.GetAttribLocation(VAO.Shader.Program, "vPosition");
+            AttributeID = GL.GetAttribLocation(VAO.Shader.Program, Name);
         }
 
         public override void OnRender()

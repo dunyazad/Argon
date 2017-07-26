@@ -18,16 +18,17 @@ namespace ArtificialNature
         List<ANMaterial> materials = new List<ANMaterial>();
 
         ANVAO vao;
-        ANVBO vbo;
+        ANVBO vboPosition;
+        ANVBO vboColor;
 
-        int attribute_vertexColor;
-        int attribute_vertexPosition;
+        //int attribute_vertexColor;
+        //int attribute_vertexPosition;
         int uniform_modelMatrix;
         int uniform_viewMatrix;
         int uniform_projectionMatrix;
         int uniform_mvp;
-        int vbo_position;
-        int vbo_color;
+        //int vbo_position;
+        //int vbo_color;
         int vbo_mview;
         Vector3[] vertdata;
         Vector4[] coldata;
@@ -44,6 +45,8 @@ namespace ArtificialNature
                 materials.Add(material);
 
                 vao = material.Shader.CreateVAO("Default");
+                vboPosition = vao.CreateVBO("vPosition");
+                vboColor = vao.CreateVBO("vColor");
             }
 
             foreach (var material in materials)
@@ -80,8 +83,8 @@ namespace ArtificialNature
             //uniform_projectionMatrix = GL.GetUniformLocation(program, "projection");
             //uniform_mvp = GL.GetUniformLocation(program, "mvp");
 
-            attribute_vertexPosition = GL.GetAttribLocation(materials[0].Shader.Program, "vPosition");
-            attribute_vertexColor = GL.GetAttribLocation(materials[0].Shader.Program, "vColor");
+            //attribute_vertexPosition = GL.GetAttribLocation(materials[0].Shader.Program, "vPosition");
+            //attribute_vertexColor = GL.GetAttribLocation(materials[0].Shader.Program, "vColor");
             uniform_modelMatrix = GL.GetUniformLocation(materials[0].Shader.Program, "model");
             uniform_viewMatrix = GL.GetUniformLocation(materials[0].Shader.Program, "view");
             uniform_projectionMatrix = GL.GetUniformLocation(materials[0].Shader.Program, "projection");
@@ -96,8 +99,8 @@ namespace ArtificialNature
              * one, then bind to it and send your information. 
              * Then, when the DrawArrays function is called, the information in
              * the buffers will be sent to the shaders and drawn to the screen. */
-            GL.GenBuffers(1, out vbo_position);
-            GL.GenBuffers(1, out vbo_color);
+            //GL.GenBuffers(1, out vbo_position);
+            //GL.GenBuffers(1, out vbo_color);
             GL.GenBuffers(1, out vbo_mview);
 
 
@@ -114,15 +117,20 @@ namespace ArtificialNature
 
                 vao.Bind();
 
-                GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
+                vboPosition.Bind();
+                //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
                 GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vertdata.Length * Vector3.SizeInBytes), vertdata, BufferUsageHint.StaticDraw);
-                GL.VertexAttribPointer(attribute_vertexPosition, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.VertexAttribPointer(vboPosition.AttributeID, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-                GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_color);
+                vboColor.Bind();
+                //GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_color);
                 GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(coldata.Length * Vector4.SizeInBytes), coldata, BufferUsageHint.StaticDraw);
-                GL.VertexAttribPointer(attribute_vertexColor, 4, VertexAttribPointerType.Float, true, 0, 0);
+                GL.VertexAttribPointer(vboColor.AttributeID, 4, VertexAttribPointerType.Float, true, 0, 0);
 
-                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                //GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+
+                vboPosition.Unbind();
+                vboColor.Unbind();
 
                 vao.Unbind();
 
@@ -140,8 +148,10 @@ namespace ArtificialNature
 
             vao.Bind();
 
-            GL.EnableVertexAttribArray(attribute_vertexPosition);
-            GL.EnableVertexAttribArray(attribute_vertexColor);
+            vboPosition.Enable();
+            vboColor.Enable();
+            //GL.EnableVertexAttribArray(attribute_vertexPosition);
+            //GL.EnableVertexAttribArray(attribute_vertexColor);
 
 
 
@@ -162,8 +172,11 @@ namespace ArtificialNature
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
-            GL.DisableVertexAttribArray(attribute_vertexPosition);
-            GL.DisableVertexAttribArray(attribute_vertexColor);
+            vboPosition.Disable();
+            vboColor.Disable();
+
+            //GL.DisableVertexAttribArray(attribute_vertexPosition);
+            //GL.DisableVertexAttribArray(attribute_vertexColor);
 
             vao.Unbind();
 
@@ -174,8 +187,8 @@ namespace ArtificialNature
 
         public override void OnTerminate()
         {
-            GL.DeleteBuffer(vbo_position);
-            GL.DeleteBuffer(vbo_color);
+            //GL.DeleteBuffer(vbo_position);
+            //GL.DeleteBuffer(vbo_color);
             GL.DeleteBuffer(vbo_mview);
 
             vao.OnTerminate();
