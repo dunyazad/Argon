@@ -32,7 +32,7 @@ namespace ArtificialNature
             ANShader result = base.Get(name);
             if (result == null)
             {
-                result = new ANShader(name);
+                result = new ANShader() { Name = name };
                 Set(name, result);
             }
 

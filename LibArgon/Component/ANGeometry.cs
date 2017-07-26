@@ -17,27 +17,42 @@ namespace ArtificialNature
     {
         List<ANMaterial> materials = new List<ANMaterial>();
 
+        ANVAO vao;
+        ANVBO vbo;
+
         int attribute_vertexColor;
         int attribute_vertexPosition;
         int uniform_modelMatrix;
         int uniform_viewMatrix;
         int uniform_projectionMatrix;
         int uniform_mvp;
-        int vao;
         int vbo_position;
         int vbo_color;
         int vbo_mview;
         Vector3[] vertdata;
         Vector4[] coldata;
 
-        public ANGeometry(ANSceneEntity sceneEntity)
-            : base(sceneEntity)
+        public ANGeometry()
+            : base()
         {
         }
 
         public override void OnInitialize()
         {
-            materials.Add(new ANMaterial("Default"));
+            {
+                var material = new ANMaterial() { Name = "Default" };
+                materials.Add(material);
+
+                vao = material.Shader.CreateVAO("Default");
+            }
+
+            foreach (var material in materials)
+            {
+                material.OnInitialize();
+            }
+
+            //vbo = new ANVBO();
+            //vbo.OnInitialize();
 
             ///** In this function, we'll start with a call to the GL.CreateProgram() function,
             // * which returns the ID for a new program object, which we'll store in pgmID. */
@@ -85,7 +100,6 @@ namespace ArtificialNature
             GL.GenBuffers(1, out vbo_color);
             GL.GenBuffers(1, out vbo_mview);
 
-            GL.GenVertexArrays(1, out vao);
 
             vertdata = new Vector3[] { new Vector3(-0.8f, -0.8f, 0f), new Vector3(0.8f, -0.8f, 0f), new Vector3(0f, 0.8f, 0f) };
             coldata = new Vector4[] { new Vector4(1f, 0f, 0f, 0.5f), new Vector4(0f, 0f, 1f, 1f), new Vector4(0f, 1f, 0f, 1f) };
@@ -96,9 +110,9 @@ namespace ArtificialNature
         {
             if (Dirty)
             {
-                GL.UseProgram(materials[0].Shader.Program);
+                materials[0].Shader.Use();
 
-                GL.BindVertexArray(vao);
+                vao.Bind();
 
                 GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
                 GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vertdata.Length * Vector3.SizeInBytes), vertdata, BufferUsageHint.StaticDraw);
@@ -109,9 +123,10 @@ namespace ArtificialNature
                 GL.VertexAttribPointer(attribute_vertexColor, 4, VertexAttribPointerType.Float, true, 0, 0);
 
                 GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-                GL.BindVertexArray(0);
 
-                GL.UseProgram(0);
+                vao.Unbind();
+
+                materials[0].Shader.Unuse();
 
                 Console.WriteLine("ANGeometry OnUpdate, dt : " + dt.ToString());
 
@@ -121,9 +136,9 @@ namespace ArtificialNature
 
         public override void OnRender()
         {
-            GL.UseProgram(materials[0].Shader.Program);
+            materials[0].Shader.Use();
 
-            GL.BindVertexArray(vao);
+            vao.Bind();
 
             GL.EnableVertexAttribArray(attribute_vertexPosition);
             GL.EnableVertexAttribArray(attribute_vertexColor);
@@ -150,8 +165,9 @@ namespace ArtificialNature
             GL.DisableVertexAttribArray(attribute_vertexPosition);
             GL.DisableVertexAttribArray(attribute_vertexColor);
 
-            GL.BindVertexArray(0);
-            GL.UseProgram(0);
+            vao.Unbind();
+
+            materials[0].Shader.Unuse();
 
             Console.WriteLine("ANGeometry OnRender");
         }
@@ -162,7 +178,7 @@ namespace ArtificialNature
             GL.DeleteBuffer(vbo_color);
             GL.DeleteBuffer(vbo_mview);
 
-            GL.DeleteVertexArray(vao);
+            vao.OnTerminate();
 
             Console.WriteLine("ANGeometry OnTerminate");
         }

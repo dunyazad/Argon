@@ -8,14 +8,15 @@ namespace ArtificialNature
 {
     public abstract class ANComponent
     {
-        public ANSceneEntity SceneEntity { get; protected set; }
+        public string Name { get; set; }
+
+        public ANSceneEntity SceneEntity { get; set; }
 
         protected bool dirty = true;
         public bool Dirty { get { return dirty; } set { dirty = value; if (SceneEntity != null) SceneEntity.Dirty = true; } }
 
-        public ANComponent(ANSceneEntity sceneEntity)
+        public ANComponent()
         {
-            SceneEntity = sceneEntity;
         }
 
         public abstract void OnInitialize();

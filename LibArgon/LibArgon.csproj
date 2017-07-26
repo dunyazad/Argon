@@ -53,7 +53,9 @@
     <Compile Include="Component\ANMaterial.cs" />
     <Compile Include="Component\ANGeometry.cs" />
     <Compile Include="Component\ANShader.cs" />
+    <Compile Include="Component\ANVBO.cs" />
     <Compile Include="Core\ANComponent.cs" />
+    <Compile Include="Component\ANVAO.cs" />
     <Compile Include="LibArgon.cs" />
     <Compile Include="Core\ANSceneObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

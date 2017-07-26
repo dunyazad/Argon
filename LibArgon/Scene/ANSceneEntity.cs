@@ -58,16 +58,16 @@ namespace ArtificialNature
 
         public override void Initialize()
         {
+            foreach (var component in components)
+            {
+                component.OnInitialize();
+            }
+
             base.Initialize();
 
             foreach (var kvp in childEntities)
             {
                 kvp.Value.Initialize();
-            }
-
-            foreach (var component in components)
-            {
-                component.OnInitialize();
             }
         }
 
@@ -75,8 +75,6 @@ namespace ArtificialNature
         {
             if (Dirty)
             {
-                base.Update(dt);
-
                 if (parent == null)
                 {
                     worldPosition = localPosition;
@@ -95,14 +93,16 @@ namespace ArtificialNature
                 dirty = false;
             }
 
-            foreach (var kvp in childEntities)
-            {
-                kvp.Value.Update(dt);
-            }
-
             foreach (var component in components)
             {
                 component.OnUpdate(dt);
+            }
+
+            base.Update(dt);
+
+            foreach (var kvp in childEntities)
+            {
+                kvp.Value.Update(dt);
             }
         }
 
@@ -123,16 +123,16 @@ namespace ArtificialNature
 
         public override void Terminate()
         {
+            foreach (var component in components)
+            {
+                component.OnTerminate();
+            }
+
             base.Terminate();
 
             foreach (var kvp in childEntities)
             {
                 kvp.Value.Terminate();
-            }
-
-            foreach (var component in components)
-            {
-                component.OnTerminate();
             }
         }
 
