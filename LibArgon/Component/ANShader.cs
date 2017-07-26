@@ -18,7 +18,7 @@ namespace ArtificialNature
         private int program;
         public int Program { get { return program; } private set { } }
 
-        Dictionary<string, ANVAO> vaos = new Dictionary<string, ANVAO>();
+        Dictionary<string, ANGraphicsBufferArray> vaos = new Dictionary<string, ANGraphicsBufferArray>();
 
         Dictionary<string, int> uniformIDs = new Dictionary<string, int>();
 
@@ -88,7 +88,7 @@ namespace ArtificialNature
             GL.UseProgram(0);
         }
 
-        public ANVAO CreateVAO(string name)
+        public ANGraphicsBufferArray CreateVAO(string name)
         {
             if(vaos.ContainsKey(name))
             {
@@ -96,7 +96,7 @@ namespace ArtificialNature
             }
             else
             {
-                var vao = new ANVAO() { Name = name, Shader = this };
+                var vao = new ANGraphicsBufferArray() { Name = name, Shader = this };
                 vaos.Add(name, vao);
                 return vao;
             }
