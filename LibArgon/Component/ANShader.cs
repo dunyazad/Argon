@@ -20,6 +20,8 @@ namespace ArtificialNature
 
         Dictionary<string, ANVAO> vaos = new Dictionary<string, ANVAO>();
 
+        Dictionary<string, int> uniformIDs = new Dictionary<string, int>();
+
         public override void OnInitialize()
         {
             if (!initialized)
@@ -76,6 +78,16 @@ namespace ArtificialNature
             }
         }
 
+        public void Use()
+        {
+            GL.UseProgram(program);
+        }
+
+        public void Unuse()
+        {
+            GL.UseProgram(0);
+        }
+
         public ANVAO CreateVAO(string name)
         {
             if(vaos.ContainsKey(name))
@@ -90,26 +102,55 @@ namespace ArtificialNature
             }
         }
 
-        public void SetAttribute(string attributeName, int size, VertexAttribPointerType type, int stride, int offset)
+        int GetUniformID(string uniformName)
         {
-            // get location of attribute from shader program
-            int index = GL.GetAttribLocation(program, attributeName);
-            GL.VertexAttribPointer(index, size, type, false, stride, offset);
+            if(uniformIDs.ContainsKey(uniformName))
+            {
+                return uniformIDs[uniformName];
+            }
+            else
+            {
+                int uniformID = GL.GetUniformLocation(program, uniformName);
+                uniformIDs[uniformName] = uniformID;
+                return uniformID;
+            }
         }
 
-        public void SetUniform1<T>(string uniformName, T value)
+        //public void SetAttribute(string attributeName, int size, VertexAttribPointerType type, int stride, int offset)
+        //{
+        //    // get location of attribute from shader program
+        //    int index = GL.GetAttribLocation(program, attributeName);
+        //    GL.VertexAttribPointer(index, size, type, false, stride, offset);
+        //}
+
+        public void SetUniformVector2(string uniformName, ref Vector2 value)
         {
-            int location = GL.GetUniformLocation(program, uniformName);
+            GL.Uniform2(GetUniformID(uniformName), value);
         }
 
-        public void Use()
+        public void SetUniformVector3(string uniformName, ref Vector3 value)
         {
-            GL.UseProgram(program);
+            GL.Uniform3(GetUniformID(uniformName), value);
         }
 
-        public void Unuse()
+        public void SetUniformVector4(string uniformName, ref Vector4 value)
         {
-            GL.UseProgram(0);
+            GL.Uniform4(GetUniformID(uniformName), ref value);
+        }
+
+        public void SetUniformMatrix2(string uniformName, bool transpose, ref Matrix2 value)
+        {
+            GL.UniformMatrix2(GetUniformID(uniformName), transpose, ref value);
+        }
+
+        public void SetUniformMatrix3(string uniformName, bool transpose, ref Matrix3 value)
+        {
+            GL.UniformMatrix3(GetUniformID(uniformName), transpose, ref value);
+        }
+
+        public void SetUniformMatrix4(string uniformName, bool transpose, ref Matrix4 value)
+        {
+            GL.UniformMatrix4(GetUniformID(uniformName), transpose, ref value);
         }
     }
 }
