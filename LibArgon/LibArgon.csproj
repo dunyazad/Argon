@@ -54,6 +54,8 @@
     <Compile Include="Component\ANGraphicsObject.cs" />
     <Compile Include="Component\ANShader.cs" />
     <Compile Include="Component\ANGraphicsBuffer.cs" />
+    <Compile Include="Component\Geometry\ANGeometryRectangle.cs" />
+    <Compile Include="Component\Geometry\ANGeometryTriangle.cs" />
     <Compile Include="Core\ANComponent.cs" />
     <Compile Include="Component\ANGraphicsBufferArray.cs" />
     <Compile Include="LibArgon.cs" />

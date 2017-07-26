@@ -24,8 +24,8 @@ namespace ArtificialNature
                 entity2.AddComponent(new ANGraphicsObject() { SceneEntity = entity2 });
                 entity2.LocalPosition = new Vector3(-1, 0, 0);
 
-                var entity3 = scene.CreateSceneEntity("Geometry3");
-                entity3.AddComponent(new ANGraphicsObject() { SceneEntity = entity3 });
+                var entity3 = scene.CreateSceneEntity("Triangle");
+                entity3.AddComponent(new ANGeometryTriangle() { SceneEntity = entity3 });
                 entity3.LocalPosition = new Vector3(0, 2, 0);
 
                 argon.Run();
@@ -46,7 +46,7 @@ namespace ArtificialNature
             {
                 scene.FindeSceneEntity("Geometry").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
                 scene.FindeSceneEntity("Geometry2").LocalRotation *= Quaternion.FromAxisAngle(-Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
-                scene.FindeSceneEntity("Geometry3").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians((float)dt * 100));
+                scene.FindeSceneEntity("Triangle").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians((float)dt * 100));
             }
         }
     }

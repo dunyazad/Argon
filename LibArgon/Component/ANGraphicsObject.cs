@@ -15,11 +15,11 @@ namespace ArtificialNature
 {
     public class ANGraphicsObject : ANComponent
     {
-        List<ANMaterial> materials = new List<ANMaterial>();
-
-        ANGraphicsBufferArray bufferArray;
-        ANGraphicsBuffer<Vector3> vboPosition;
-        ANGraphicsBuffer<Vector4> vboColor;
+        protected List<ANMaterial> materials = new List<ANMaterial>();
+        
+        protected ANGraphicsBufferArray bufferArray;
+        protected ANGraphicsBuffer<Vector3> vboPosition;
+        protected ANGraphicsBuffer<Vector4> vboColor;
 
         public ANGraphicsObject()
             : base()
@@ -42,8 +42,8 @@ namespace ArtificialNature
                 material.OnInitialize();
             }
 
-            vboPosition.AddData(new Vector3[] { new Vector3(-0.8f, -0.8f, 0f), new Vector3(0.8f, -0.8f, 0f), new Vector3(0f, 0.8f, 0f) });
-            vboColor.AddData(new Vector4[] { new Vector4(1f, 0f, 0f, 0.5f), new Vector4(0f, 0f, 1f, 1f), new Vector4(0f, 1f, 0f, 1f) });
+            //vboPosition.AddData(new Vector3[] { new Vector3(-0.8f, -0.8f, 0f), new Vector3(0.8f, -0.8f, 0f), new Vector3(0f, 0.8f, 0f) });
+            //vboColor.AddData(new Vector4[] { new Vector4(1f, 0f, 0f, 0.5f), new Vector4(0f, 0f, 1f, 1f), new Vector4(0f, 1f, 0f, 1f) });
 
             Console.WriteLine("ANGeometry OnInitialize");
         }
