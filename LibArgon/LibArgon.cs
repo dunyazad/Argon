@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
@@ -10,9 +11,6 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using QuickFont;
 using QuickFont.Configuration;
-
-using ArtificialNature.Scene;
-using System.ComponentModel;
 
 namespace ArtificialNature
 {

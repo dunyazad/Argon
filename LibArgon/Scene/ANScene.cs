@@ -9,9 +9,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
-using ArtificialNature.Core;
-
-namespace ArtificialNature.Scene
+namespace ArtificialNature
 {
     public class ANScene : ANSceneObject
     {
@@ -19,7 +17,9 @@ namespace ArtificialNature.Scene
 
         public ANSceneEntityCamera MainCamera { get; set; }
 
-        public ANScene(string name)
+        Dictionary<string, ANSceneEntity> sceneEntities = new Dictionary<string, ANSceneEntity>();
+
+        internal ANScene(string name)
             : base(null, name)
         {
             Scene = this;
@@ -72,6 +72,34 @@ namespace ArtificialNature.Scene
         public override void Resize(float width, float height)
         {
             base.Resize(width, height);
+        }
+
+        public ANSceneEntity CreateSceneEntity(string name)
+        {
+            if (sceneEntities.ContainsKey(name))
+            {
+                return sceneEntities[name];
+            }
+            else
+            {
+                var entity = new ANSceneEntity(this, name);
+                entity.Parent = RootEntity;
+
+                sceneEntities.Add(name, entity);
+                return entity;
+            }
+        }
+
+        public ANSceneEntity FindeSceneEntity(string name)
+        {
+            if (sceneEntities.ContainsKey(name))
+            {
+                return sceneEntities[name];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

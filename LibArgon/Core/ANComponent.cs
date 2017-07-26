@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ArtificialNature.Core
+namespace ArtificialNature
 {
     public abstract class ANComponent
     {
-        public ANSceneObject SceneObject { get; protected set; }
+        public ANSceneEntity SceneEntity { get; protected set; }
 
-        public ANComponent(ANSceneObject sceneObject)
+        protected bool dirty = true;
+        public bool Dirty { get { return dirty; } set { dirty = value; if (SceneEntity != null) SceneEntity.Dirty = true; } }
+
+        public ANComponent(ANSceneEntity sceneEntity)
         {
-            SceneObject = sceneObject;
+            SceneEntity = sceneEntity;
         }
 
         public abstract void OnInitialize();

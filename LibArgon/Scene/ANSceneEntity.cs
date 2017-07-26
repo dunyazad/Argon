@@ -9,9 +9,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
-using ArtificialNature.Core;
-
-namespace ArtificialNature.Scene
+namespace ArtificialNature
 {
     public class ANSceneEntity : ANSceneObject
     {
@@ -94,17 +92,17 @@ namespace ArtificialNature.Scene
 
                 WorldMatrix = Matrix4.CreateScale(worldScale) * Matrix4.CreateFromQuaternion(worldRotation) * Matrix4.CreateTranslation(worldPosition);
 
-                foreach (var kvp in childEntities)
-                {
-                    kvp.Value.Update(dt);
-                }
-
-                foreach (var component in components)
-                {
-                    component.OnUpdate(dt);
-                }
-
                 dirty = false;
+            }
+
+            foreach (var kvp in childEntities)
+            {
+                kvp.Value.Update(dt);
+            }
+
+            foreach (var component in components)
+            {
+                component.OnUpdate(dt);
             }
         }
 

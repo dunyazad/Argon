@@ -8,9 +8,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
-using ArtificialNature.Core;
-
-namespace ArtificialNature.Component
+namespace ArtificialNature
 {
     public class ANShader
     {

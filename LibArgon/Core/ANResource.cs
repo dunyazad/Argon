@@ -8,9 +8,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 
-using ArtificialNature.Component;
-
-namespace ArtificialNature.Core
+namespace ArtificialNature
 {
     class ArFileStreamCache : Cache<FileStream>
     {

@@ -11,10 +11,7 @@ using OpenTK.Input;
 using QuickFont;
 using QuickFont.Configuration;
 
-using ArtificialNature.Core;
-using ArtificialNature.Scene;
-
-namespace ArtificialNature.Component
+namespace ArtificialNature
 {
     public class ANGeometry : ANComponent
     {
@@ -33,8 +30,8 @@ namespace ArtificialNature.Component
         Vector3[] vertdata;
         Vector4[] coldata;
 
-        public ANGeometry(ANSceneObject sceneObject)
-            : base(sceneObject)
+        public ANGeometry(ANSceneEntity sceneEntity)
+            : base(sceneEntity)
         {
         }
 
@@ -97,37 +94,29 @@ namespace ArtificialNature.Component
         }
         public override void OnUpdate(double dt)
         {
-            GL.UseProgram(materials[0].Shader.Program);
+            if (Dirty)
+            {
+                GL.UseProgram(materials[0].Shader.Program);
 
-            GL.BindVertexArray(vao);
+                GL.BindVertexArray(vao);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
-            GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vertdata.Length * Vector3.SizeInBytes), vertdata, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attribute_vertexPosition, 3, VertexAttribPointerType.Float, false, 0, 0);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
+                GL.BufferData<Vector3>(BufferTarget.ArrayBuffer, (IntPtr)(vertdata.Length * Vector3.SizeInBytes), vertdata, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(attribute_vertexPosition, 3, VertexAttribPointerType.Float, false, 0, 0);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_color);
-            GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(coldata.Length * Vector4.SizeInBytes), coldata, BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(attribute_vertexColor, 4, VertexAttribPointerType.Float, true, 0, 0);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_color);
+                GL.BufferData<Vector4>(BufferTarget.ArrayBuffer, (IntPtr)(coldata.Length * Vector4.SizeInBytes), coldata, BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(attribute_vertexColor, 4, VertexAttribPointerType.Float, true, 0, 0);
 
-            var modelMatrix = (SceneObject as ANSceneEntity).WorldMatrix;
-            GL.UniformMatrix4(uniform_modelMatrix, false, ref modelMatrix);
+                GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+                GL.BindVertexArray(0);
 
-            var viewMatrix = SceneObject.Scene.MainCamera.ViewMatrix;
-            GL.UniformMatrix4(uniform_viewMatrix, false, ref viewMatrix);
+                GL.UseProgram(0);
 
-            var projectionMatrix = SceneObject.Scene.MainCamera.ProjectionMatrix;
-            GL.UniformMatrix4(uniform_projectionMatrix, false, ref projectionMatrix);
+                Console.WriteLine("ANGeometry OnUpdate, dt : " + dt.ToString());
 
-            var mvp = modelMatrix * viewMatrix * projectionMatrix;
-            GL.UniformMatrix4(uniform_mvp, false, ref mvp);
-
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            GL.BindVertexArray(0);
-
-            GL.UseProgram(0);
-
-            Console.WriteLine("ANGeometry OnUpdate, dt : " + dt.ToString());
+                Dirty = false;
+            }
         }
 
         public override void OnRender()
@@ -135,17 +124,32 @@ namespace ArtificialNature.Component
             GL.UseProgram(materials[0].Shader.Program);
 
             GL.BindVertexArray(vao);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo_position);
 
             GL.EnableVertexAttribArray(attribute_vertexPosition);
             GL.EnableVertexAttribArray(attribute_vertexColor);
+
+
+
+            var modelMatrix = SceneEntity.WorldMatrix;
+            GL.UniformMatrix4(uniform_modelMatrix, false, ref modelMatrix);
+
+            var viewMatrix = SceneEntity.Scene.MainCamera.ViewMatrix;
+            GL.UniformMatrix4(uniform_viewMatrix, false, ref viewMatrix);
+
+            var projectionMatrix = SceneEntity.Scene.MainCamera.ProjectionMatrix;
+            GL.UniformMatrix4(uniform_projectionMatrix, false, ref projectionMatrix);
+
+            var mvp = modelMatrix * viewMatrix * projectionMatrix;
+            GL.UniformMatrix4(uniform_mvp, false, ref mvp);
+
+
+
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
             GL.DisableVertexAttribArray(attribute_vertexPosition);
             GL.DisableVertexAttribArray(attribute_vertexColor);
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
 
@@ -154,6 +158,12 @@ namespace ArtificialNature.Component
 
         public override void OnTerminate()
         {
+            GL.DeleteBuffer(vbo_position);
+            GL.DeleteBuffer(vbo_color);
+            GL.DeleteBuffer(vbo_mview);
+
+            GL.DeleteVertexArray(vao);
+
             Console.WriteLine("ANGeometry OnTerminate");
         }
 

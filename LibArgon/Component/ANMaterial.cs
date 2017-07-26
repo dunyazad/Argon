@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ArtificialNature.Core;
-
-namespace ArtificialNature.Component
+namespace ArtificialNature
 {
     public class ANMaterial
     {

@@ -9,9 +9,7 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
-using ArtificialNature.Core;
-
-namespace ArtificialNature.Scene
+namespace ArtificialNature
 {
     public class ANSceneEntityCamera : ANSceneEntity
     {

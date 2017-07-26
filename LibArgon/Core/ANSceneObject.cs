@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ArtificialNature.Scene;
-
-namespace ArtificialNature.Core
+namespace ArtificialNature
 {
     public abstract class ANSceneObject
     {
