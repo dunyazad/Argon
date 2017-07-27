@@ -102,72 +102,97 @@ namespace ArtificialNature
             GL.UseProgram(0);
         }
 
-        //public GraphicsBufferArray GetBufferArray(string name)
-        //{
-        //    if(vaos.ContainsKey(name))
-        //    {
-        //        return vaos[name];
-        //    }
-        //    else
-        //    {
-        //        var vao = new GraphicsBufferArray(SceneEntity, this, name);
-        //        vaos.Add(name, vao);
-        //        return vao;
-        //    }
-        //}
-
-        int GetUniformID(string uniformName)
+        public void BufferData(GraphicsBufferArray bufferArray)
         {
-            if(UniformIDs.ContainsKey(uniformName))
-            {
-                return UniformIDs[uniformName];
-            }
-            else
-            {
-                return -1;
-            }
+            GL.UseProgram(program);
+
+            bufferArray.BufferData();
+
+            GL.UseProgram(0);
         }
 
-        int AttributeID(string attributeName)
+        public void BufferData(GraphicsBufferArray[] bufferArrays)
         {
-            if (AttributeIDs.ContainsKey(attributeName))
+            GL.UseProgram(program);
+
+            foreach (var bufferArray in bufferArrays)
             {
-                return AttributeIDs[attributeName];
+                bufferArray.BufferData();
             }
-            else
-            {
-                return -1;
-            }
+
+            GL.UseProgram(0);
         }
 
         public void SetUniformVector2(string uniformName, ref Vector2 value)
         {
-            GL.Uniform2(GetUniformID(uniformName), value);
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.Uniform2(uniformID, value);
+                }
+            }
         }
 
         public void SetUniformVector3(string uniformName, ref Vector3 value)
         {
-            GL.Uniform3(GetUniformID(uniformName), value);
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.Uniform3(uniformID, value);
+                }
+            }
         }
 
         public void SetUniformVector4(string uniformName, ref Vector4 value)
         {
-            GL.Uniform4(GetUniformID(uniformName), ref value);
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.Uniform4(uniformID, value);
+                }
+            }
         }
 
         public void SetUniformMatrix2(string uniformName, bool transpose, ref Matrix2 value)
         {
-            GL.UniformMatrix2(GetUniformID(uniformName), transpose, ref value);
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.UniformMatrix2(uniformID, transpose, ref value);
+                }
+            }
         }
 
         public void SetUniformMatrix3(string uniformName, bool transpose, ref Matrix3 value)
         {
-            GL.UniformMatrix3(GetUniformID(uniformName), transpose, ref value);
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.UniformMatrix3(uniformID, transpose, ref value);
+                }
+            }
         }
 
         public void SetUniformMatrix4(string uniformName, bool transpose, ref Matrix4 value)
         {
-            GL.UniformMatrix4(GetUniformID(uniformName), transpose, ref value);
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.UniformMatrix4(uniformID, transpose, ref value);
+                }
+            }
         }
 
         public override void CleanUp()

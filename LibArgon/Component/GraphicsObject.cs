@@ -42,11 +42,7 @@ namespace ArtificialNature
         {
             if (Dirty)
             {
-                materials[0].Shader.Use();
-
-                bufferArray.BufferData();
-
-                materials[0].Shader.Unuse();
+                materials[0].Shader.BufferData(bufferArray);
 
                 Console.WriteLine("Geometry OnUpdate, dt : " + dt.ToString());
 
