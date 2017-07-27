@@ -15,13 +15,13 @@ namespace ArtificialNature
                 var scene = argon.CreateScene("Argon App");
                 scene.OnUpdate += Scene_OnUpdate;
 
-                var entity = scene.CreateSceneEntity("Geometry");
-                entity.AddComponent(new GraphicsObject(entity, "Geometry"));
+                var entity = scene.CreateSceneEntity("Triangle");
+                entity.AddComponent(new GeometryTriangle(entity, "Triangle"));
                 entity.LocalPosition = new Vector3(1, 0, 0);
                 //entity.OnUpdate += Entity_OnUpdate;
 
-                var entity2 = scene.CreateSceneEntity("Triangle");
-                entity2.AddComponent(new GeometryTriangle(entity2, "Triangle"));
+                var entity2 = scene.CreateSceneEntity("Triangle2");
+                entity2.AddComponent(new GeometryTriangle(entity2, "Triangle2"));
                 entity2.LocalPosition = new Vector3(-1, 0, 0);
 
                 var entity3 = scene.CreateSceneEntity("Rectangle");
@@ -44,8 +44,8 @@ namespace ArtificialNature
             var scene = sceneObject as Scene;
             if(scene != null)
             {
-                scene.FindeSceneEntity("Geometry").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
-                scene.FindeSceneEntity("Triangle").LocalRotation *= Quaternion.FromAxisAngle(-Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
+                scene.FindeSceneEntity("Triangle").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
+                scene.FindeSceneEntity("Triangle2").LocalRotation *= Quaternion.FromAxisAngle(-Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
                 scene.FindeSceneEntity("Rectangle").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians((float)dt * 100));
             }
         }

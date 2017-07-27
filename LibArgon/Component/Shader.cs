@@ -17,7 +17,7 @@ namespace ArtificialNature
         private int program;
         public int Program { get { return program; } private set { } }
 
-        Dictionary<string, GraphicsBufferArray> vaos = new Dictionary<string, GraphicsBufferArray>();
+        //Dictionary<string, GraphicsBufferArray> vaos = new Dictionary<string, GraphicsBufferArray>();
         public Dictionary<string, int> UniformIDs { get; private set; } = new Dictionary<string, int>();
         public Dictionary<string, int> AttributeIDs { get; private set; } = new Dictionary<string, int>();
 
@@ -85,8 +85,6 @@ namespace ArtificialNature
 
             UniformIDs.Clear();
 
-            vaos.Clear();
-
             GL.DeleteProgram(program);
         }
 
@@ -108,19 +106,19 @@ namespace ArtificialNature
             GL.UseProgram(0);
         }
 
-        public GraphicsBufferArray GetBufferArray(string name)
-        {
-            if(vaos.ContainsKey(name))
-            {
-                return vaos[name];
-            }
-            else
-            {
-                var vao = new GraphicsBufferArray(SceneEntity, this, name);
-                vaos.Add(name, vao);
-                return vao;
-            }
-        }
+        //public GraphicsBufferArray GetBufferArray(string name)
+        //{
+        //    if(vaos.ContainsKey(name))
+        //    {
+        //        return vaos[name];
+        //    }
+        //    else
+        //    {
+        //        var vao = new GraphicsBufferArray(SceneEntity, this, name);
+        //        vaos.Add(name, vao);
+        //        return vao;
+        //    }
+        //}
 
         int GetUniformID(string uniformName)
         {

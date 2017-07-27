@@ -28,7 +28,7 @@ namespace ArtificialNature
                 var material = new Material(SceneEntity, "Default");
                 materials.Add(material);
 
-                bufferArray = material.Shader.GetBufferArray("Default");
+                bufferArray = new GraphicsBufferArray(entity, material.Shader, "Default");
                 vboPosition = bufferArray.CreateVBO<Vector3>("vPosition");
                 vboColor = bufferArray.CreateVBO<Vector4>("vColor");
             }
