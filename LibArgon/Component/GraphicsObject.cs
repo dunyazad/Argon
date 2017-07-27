@@ -42,7 +42,10 @@ namespace ArtificialNature
         {
             if (Dirty)
             {
-                materials[0].Shader.BufferData(bufferArray);
+                foreach (var material in materials)
+                {
+                    material.Shader.BufferData(bufferArray);
+                }
 
                 Console.WriteLine("Geometry OnUpdate, dt : " + dt.ToString());
 

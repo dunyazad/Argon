@@ -123,6 +123,37 @@ namespace ArtificialNature
             GL.UseProgram(0);
         }
 
+        public void Render(GraphicsBufferArray bufferArray)
+        {
+            GL.UseProgram(program);
+
+            bufferArray.Bind();
+
+
+
+
+            bufferArray.Unbind();
+
+            GL.UseProgram(0);
+        }
+
+        public void Render(GraphicsBufferArray[] bufferArrays)
+        {
+            GL.UseProgram(program);
+
+            foreach (var bufferArray in bufferArrays)
+            {
+                bufferArray.Bind();
+
+
+
+
+                bufferArray.Unbind();
+            }
+
+            GL.UseProgram(0);
+        }
+
         public void SetUniformVector2(string uniformName, ref Vector2 value)
         {
             if (UniformIDs.ContainsKey(uniformName))
