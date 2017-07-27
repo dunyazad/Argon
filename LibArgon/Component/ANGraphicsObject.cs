@@ -89,7 +89,7 @@ namespace ArtificialNature
 
 
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vboPosition.Datas.Count);
 
             vboPosition.Disable();
             vboColor.Disable();
