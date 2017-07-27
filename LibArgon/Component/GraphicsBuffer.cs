@@ -40,6 +40,8 @@ namespace ArtificialNature
 
         int dataUnitSize;
 
+        VertexAttribPointerType pointerType;
+
         public GraphicsBuffer(SceneEntity sceneEntity, GraphicsBufferArray bufferArray, string name)
             : base(sceneEntity, name)
         {
@@ -49,6 +51,47 @@ namespace ArtificialNature
 
             GL.GenBuffers(1, out vbo);
             AttributeID = GL.GetAttribLocation(BufferArray.Shader.Program, Name);
+
+            if(typeof(T) == typeof(sbyte))
+            {
+                pointerType = VertexAttribPointerType.Byte;
+            }
+            else if (typeof(T) == typeof(byte))
+            {
+                pointerType = VertexAttribPointerType.UnsignedByte;
+            }
+            else if (typeof(T) == typeof(short))
+            {
+                pointerType = VertexAttribPointerType.Short;
+            }
+            else if (typeof(T) == typeof(ushort))
+            {
+                pointerType = VertexAttribPointerType.UnsignedShort;
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                pointerType = VertexAttribPointerType.Int;
+            }
+            else if (typeof(T) == typeof(uint))
+            {
+                pointerType = VertexAttribPointerType.UnsignedInt;
+            }
+            else if (typeof(T) == typeof(float))
+            {
+                pointerType = VertexAttribPointerType.Float;
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                pointerType = VertexAttribPointerType.Double;
+            }
+            else if (typeof(T) == typeof(Vector3))
+            {
+                pointerType = VertexAttribPointerType.Float;
+            }
+            else if (typeof(T) == typeof(Vector4))
+            {
+                pointerType = VertexAttribPointerType.Float;
+            }
         }
 
         ~GraphicsBuffer()
@@ -97,7 +140,7 @@ namespace ArtificialNature
         {
             Bind();
             GL.BufferData<T>(BufferTarget.ArrayBuffer, (IntPtr)(Datas.Count * dataUnitSize), Datas.ToArray(), BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(AttributeID, dataUnitSize / sizeof(float), VertexAttribPointerType.Float, false, 0, 0);
+            GL.VertexAttribPointer(AttributeID, dataUnitSize / sizeof(float), pointerType, false, 0, 0);
             Unbind();
         }
 
