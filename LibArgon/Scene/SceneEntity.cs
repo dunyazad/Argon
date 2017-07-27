@@ -11,10 +11,10 @@ using OpenTK.Input;
 
 namespace ArtificialNature
 {
-    public class ANSceneEntity : ANSceneObject
+    public class SceneEntity : SceneObject
     {
-        protected ANSceneEntity parent = null;
-        public ANSceneEntity Parent
+        protected SceneEntity parent = null;
+        public SceneEntity Parent
         {
             get { return parent; }
             set
@@ -28,9 +28,9 @@ namespace ArtificialNature
             }
         }
 
-        protected Dictionary<string, ANSceneEntity> childEntities = new Dictionary<string, ANSceneEntity>();
+        protected Dictionary<string, SceneEntity> childEntities = new Dictionary<string, SceneEntity>();
 
-        protected List<ANComponent> components = new List<ANComponent>();
+        protected List<Component> components = new List<Component>();
 
         Vector3 localScale = Vector3.One;
         public Vector3 LocalScale { get { return localScale; } set { localScale = value; Dirty = true; } }
@@ -51,24 +51,16 @@ namespace ArtificialNature
         public bool Dirty { get { return dirty; } set { dirty = value; if (Parent != null) Parent.Dirty = true; } }
 
 
-        public ANSceneEntity(ANScene scene, string name)
+        public SceneEntity(Scene scene, string name)
             : base(scene, name)
         {
         }
 
-        public override void Initialize()
+        ~SceneEntity()
         {
-            foreach (var component in components)
-            {
-                component.OnInitialize();
-            }
+            childEntities.Clear();
 
-            base.Initialize();
-
-            foreach (var kvp in childEntities)
-            {
-                kvp.Value.Initialize();
-            }
+            components.Clear();
         }
 
         public override void Update(double dt)
@@ -121,22 +113,7 @@ namespace ArtificialNature
             }
         }
 
-        public override void Terminate()
-        {
-            foreach (var component in components)
-            {
-                component.OnTerminate();
-            }
-
-            base.Terminate();
-
-            foreach (var kvp in childEntities)
-            {
-                kvp.Value.Terminate();
-            }
-        }
-
-        public void AddComponent(ANComponent component)
+        public void AddComponent(Component component)
         {
             if (!components.Contains(component))
             {

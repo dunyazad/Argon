@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ArtificialNature
 {
-    class ANSceneLayer
+    class SceneLayer
     {
     }
 }

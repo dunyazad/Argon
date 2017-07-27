@@ -11,7 +11,7 @@ using OpenTK.Input;
 
 namespace ArtificialNature
 {
-    public class ANSceneEntityCamera : ANSceneEntity
+    public class SceneEntityCamera : SceneEntity
     {
         Matrix4 viewMatrix;
         public Matrix4 ViewMatrix { get { return viewMatrix; } set { viewMatrix = value; Dirty = true; } }
@@ -47,7 +47,7 @@ namespace ArtificialNature
         Vector3 upDirection;
         public Vector3 UpDirection { get { return upDirection; } set { upDirection = value; Dirty = true; } }
 
-        public ANSceneEntityCamera(ANScene scene, string name)
+        public SceneEntityCamera(Scene scene, string name)
             : base(scene, name)
         {
             EyePosition = new Vector3(0, 3, 5);
@@ -64,9 +64,9 @@ namespace ArtificialNature
             ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(Fovy * OpenTK.MathHelper.Pi / 180, AspectRatio, Near, Far);
         }
 
-        public override void Initialize()
+        ~SceneEntityCamera()
         {
-            base.Initialize();
+
         }
 
         public override void Update(double dt)
@@ -83,11 +83,6 @@ namespace ArtificialNature
         public override void Render()
         {
             base.Render();
-        }
-
-        public override void Terminate()
-        {
-            base.Terminate();
         }
 
         public override void Resize(float width, float height)

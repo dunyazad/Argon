@@ -27,6 +27,16 @@ namespace ArtificialNature
     {
         Dictionary<string, T> cache = new Dictionary<string, T>();
 
+        public Cache()
+        {
+
+        }
+
+        ~Cache()
+        {
+
+        }
+
         public virtual T Get(string name)
         {
             if (cache.ContainsKey(name))

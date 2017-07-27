@@ -13,23 +13,26 @@ using QuickFont.Configuration;
 
 namespace ArtificialNature
 {
-    public class ANGraphicsBufferArray : ANComponent
+    public class GraphicsBufferArray : Component
     {
-        public ANShader Shader { get; set; }
+        public Shader Shader { get; set; }
 
         protected int vao;
 
-        Dictionary<string, ANGraphicsBufferBase> buffers = new Dictionary<string, ANGraphicsBufferBase>();
+        Dictionary<string, GraphicsBufferBase> buffers = new Dictionary<string, GraphicsBufferBase>();
 
-
-        public override void OnInitialize()
+        public GraphicsBufferArray(SceneEntity sceneEntity, Shader shader, string name)
+            : base(sceneEntity, name)
         {
+            Shader = shader;
             GL.GenVertexArrays(1, out vao);
+        }
 
-            foreach (var kvp in buffers)
-            {
-                kvp.Value.OnInitialize();
-            }
+        ~GraphicsBufferArray()
+        {
+            buffers.Clear();
+
+            GL.DeleteVertexArray(vao);
         }
 
         public override void OnUpdate(double dt)
@@ -40,16 +43,7 @@ namespace ArtificialNature
         {
         }
 
-        public override void OnTerminate()
-        {
-            foreach (var kvp in buffers)
-            {
-                kvp.Value.OnTerminate();
-            }
-
-            GL.DeleteVertexArray(vao);
-        }
-
+        
         public void Bind()
         {
             GL.BindVertexArray(vao);
@@ -60,15 +54,15 @@ namespace ArtificialNature
             GL.BindVertexArray(0);
         }
 
-        public ANGraphicsBuffer<T> CreateVBO<T>(string name) where T : struct
+        public GraphicsBuffer<T> CreateVBO<T>(string name) where T : struct
         {
             if (buffers.ContainsKey(name))
             {
-                return buffers[name] as ANGraphicsBuffer<T>;
+                return buffers[name] as GraphicsBuffer<T>;
             }
             else
             {
-                var vbo = new ANGraphicsBuffer<T>() { Name = name, VAO = this };
+                var vbo = new GraphicsBuffer<T>(SceneEntity, this, name);
                 buffers.Add(name, vbo);
                 return vbo;
             }

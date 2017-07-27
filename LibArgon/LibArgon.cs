@@ -18,8 +18,8 @@ namespace ArtificialNature
     {
         public enum InputType { Keyboard, Mouse };
 
-        Dictionary<string, ANScene> scenes = new Dictionary<string, ANScene>();
-        public ANScene ActiveScene { get; set; }
+        Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
+        public Scene ActiveScene { get; set; }
 
         public LibArgon()
         {
@@ -28,7 +28,7 @@ namespace ArtificialNature
             WindowBorder = WindowBorder.Resizable;
         }
 
-        public ANScene CreateScene(string name)
+        public Scene CreateScene(string name)
         {
             if(scenes.ContainsKey(name))
             {
@@ -36,7 +36,7 @@ namespace ArtificialNature
             }
             else
             {
-                ANScene scene = new ANScene(name);
+                Scene scene = new Scene(name);
                 scenes.Add(name, scene);
                 if(ActiveScene == null)
                 {
@@ -52,7 +52,6 @@ namespace ArtificialNature
 
             foreach (var kvp in scenes)
             {
-                kvp.Value.Initialize();
                 kvp.Value.Resize(ClientRectangle.Width, ClientRectangle.Height);
             }
         }
@@ -95,10 +94,7 @@ namespace ArtificialNature
         {
             base.OnClosing(e);
 
-            foreach (var kvp in scenes)
-            {
-                kvp.Value.Terminate();
-            }
+            scenes.Clear();
         }
 
         protected override void OnKeyPress(KeyPressEventArgs e)

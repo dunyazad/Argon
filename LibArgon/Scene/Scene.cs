@@ -11,28 +11,26 @@ using OpenTK.Input;
 
 namespace ArtificialNature
 {
-    public class ANScene : ANSceneObject
+    public class Scene : SceneObject
     {
-        public ANSceneEntity RootEntity { get; protected set; }
+        public SceneEntity RootEntity { get; protected set; }
 
-        public ANSceneEntityCamera MainCamera { get; set; }
+        public SceneEntityCamera MainCamera { get; set; }
 
-        Dictionary<string, ANSceneEntity> sceneEntities = new Dictionary<string, ANSceneEntity>();
+        Dictionary<string, SceneEntity> sceneEntities = new Dictionary<string, SceneEntity>();
 
-        internal ANScene(string name)
+        internal Scene(string name)
             : base(null, name)
         {
             Scene = this;
-            RootEntity = new ANSceneEntity(this, "RootEntity");
-            MainCamera = new ANSceneEntityCamera(this, "DefaultCamera");
+            RootEntity = new SceneEntity(this, "RootEntity");
+            MainCamera = new SceneEntityCamera(this, "DefaultCamera");
             MainCamera.Parent = RootEntity;
         }
 
-        public override void Initialize()
+        ~Scene()
         {
-            base.Initialize();
 
-            RootEntity.Initialize();
         }
 
         public override void Update(double dt)
@@ -62,19 +60,12 @@ namespace ArtificialNature
             GL.Flush();
         }
 
-        public override void Terminate()
-        {
-            base.Terminate();
-
-            RootEntity.Terminate();
-        }
-
         public override void Resize(float width, float height)
         {
             base.Resize(width, height);
         }
 
-        public ANSceneEntity CreateSceneEntity(string name)
+        public SceneEntity CreateSceneEntity(string name)
         {
             if (sceneEntities.ContainsKey(name))
             {
@@ -82,7 +73,7 @@ namespace ArtificialNature
             }
             else
             {
-                var entity = new ANSceneEntity(this, name);
+                var entity = new SceneEntity(this, name);
                 entity.Parent = RootEntity;
 
                 sceneEntities.Add(name, entity);
@@ -90,7 +81,7 @@ namespace ArtificialNature
             }
         }
 
-        public ANSceneEntity FindeSceneEntity(string name)
+        public SceneEntity FindeSceneEntity(string name)
         {
             if (sceneEntities.ContainsKey(name))
             {

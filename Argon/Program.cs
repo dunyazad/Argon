@@ -16,16 +16,16 @@ namespace ArtificialNature
                 scene.OnUpdate += Scene_OnUpdate;
 
                 var entity = scene.CreateSceneEntity("Geometry");
-                entity.AddComponent(new ANGraphicsObject() { SceneEntity = entity });
+                entity.AddComponent(new GraphicsObject(entity, "Geometry"));
                 entity.LocalPosition = new Vector3(1, 0, 0);
                 //entity.OnUpdate += Entity_OnUpdate;
 
                 var entity2 = scene.CreateSceneEntity("Triangle");
-                entity2.AddComponent(new ANGeometryTriangle() { SceneEntity = entity2 });
+                entity2.AddComponent(new GeometryTriangle(entity2, "Triangle"));
                 entity2.LocalPosition = new Vector3(-1, 0, 0);
 
                 var entity3 = scene.CreateSceneEntity("Rectangle");
-                entity3.AddComponent(new ANGeometryRectangle() { SceneEntity = entity3 });
+                entity3.AddComponent(new GeometryRectangle(entity3, "Rectangle"));
                 entity3.LocalPosition = new Vector3(0, 2, 0);
 
                 argon.Run();
@@ -33,15 +33,15 @@ namespace ArtificialNature
             }
         }
 
-        //private static void Entity_OnUpdate(ANSceneObject sceneObject, double dt)
+        //private static void Entity_OnUpdate(SceneObject sceneObject, double dt)
         //{
-        //    var entity = sceneObject as ANSceneEntity;
+        //    var entity = sceneObject as SceneEntity;
         //    entity.LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
         //}
 
-        private static void Scene_OnUpdate(ANSceneObject sceneObject, double dt)
+        private static void Scene_OnUpdate(SceneObject sceneObject, double dt)
         {
-            var scene = sceneObject as ANScene;
+            var scene = sceneObject as Scene;
             if(scene != null)
             {
                 scene.FindeSceneEntity("Geometry").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));

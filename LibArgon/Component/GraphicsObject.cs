@@ -13,23 +13,19 @@ using QuickFont.Configuration;
 
 namespace ArtificialNature
 {
-    public class ANGraphicsObject : ANComponent
+    public class GraphicsObject : Component
     {
-        protected List<ANMaterial> materials = new List<ANMaterial>();
+        protected List<Material> materials = new List<Material>();
         
-        protected ANGraphicsBufferArray bufferArray;
-        protected ANGraphicsBuffer<Vector3> vboPosition;
-        protected ANGraphicsBuffer<Vector4> vboColor;
+        protected GraphicsBufferArray bufferArray;
+        protected GraphicsBuffer<Vector3> vboPosition;
+        protected GraphicsBuffer<Vector4> vboColor;
 
-        public ANGraphicsObject()
-            : base()
-        {
-        }
-
-        public override void OnInitialize()
+        public GraphicsObject(SceneEntity entity, string name)
+            : base(entity, name)
         {
             {
-                var material = new ANMaterial() { Name = "Default" };
+                var material = new Material(SceneEntity, "Default");
                 materials.Add(material);
 
                 bufferArray = material.Shader.GetBufferArray("Default");
@@ -37,13 +33,14 @@ namespace ArtificialNature
                 vboColor = bufferArray.CreateVBO<Vector4>("vColor");
             }
 
-            foreach (var material in materials)
-            {
-                material.OnInitialize();
-            }
-
-            Console.WriteLine("ANGeometry OnInitialize");
+            Console.WriteLine("GraphicsObject Ctor");
         }
+
+        ~GraphicsObject()
+        {
+            materials.Clear();
+        }
+
         public override void OnUpdate(double dt)
         {
             if (Dirty)
@@ -54,7 +51,7 @@ namespace ArtificialNature
 
                 materials[0].Shader.Unuse();
 
-                Console.WriteLine("ANGeometry OnUpdate, dt : " + dt.ToString());
+                Console.WriteLine("Geometry OnUpdate, dt : " + dt.ToString());
 
                 Dirty = false;
             }
@@ -96,14 +93,7 @@ namespace ArtificialNature
 
             materials[0].Shader.Unuse();
 
-            Console.WriteLine("ANGeometry OnRender");
-        }
-
-        public override void OnTerminate()
-        {
-            bufferArray.OnTerminate();
-
-            Console.WriteLine("ANGeometry OnTerminate");
+            Console.WriteLine("Geometry OnRender");
         }
     }
 }

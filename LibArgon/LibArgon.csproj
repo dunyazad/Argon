@@ -50,23 +50,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Component\ANMaterial.cs" />
-    <Compile Include="Component\ANGraphicsObject.cs" />
-    <Compile Include="Component\ANShader.cs" />
-    <Compile Include="Component\ANGraphicsBuffer.cs" />
-    <Compile Include="Component\Geometry\ANGeometryRectangle.cs" />
-    <Compile Include="Component\Geometry\ANGeometryTriangle.cs" />
-    <Compile Include="Core\ANComponent.cs" />
-    <Compile Include="Component\ANGraphicsBufferArray.cs" />
+    <Compile Include="Component\Material.cs" />
+    <Compile Include="Component\GraphicsObject.cs" />
+    <Compile Include="Component\Shader.cs" />
+    <Compile Include="Component\GraphicsBuffer.cs" />
+    <Compile Include="Component\Geometry\GeometryRectangle.cs" />
+    <Compile Include="Component\Geometry\GeometryTriangle.cs" />
+    <Compile Include="Core\Component.cs" />
+    <Compile Include="Component\GraphicsBufferArray.cs" />
+    <Compile Include="Core\ObjectBase.cs" />
     <Compile Include="LibArgon.cs" />
-    <Compile Include="Core\ANSceneObject.cs" />
+    <Compile Include="Core\SceneObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\ANResource.cs" />
-    <Compile Include="Scene\ANScene.cs" />
-    <Compile Include="Scene\ANSceneEntityCamera.cs" />
-    <Compile Include="Scene\ANSceneEntity.cs" />
+    <Compile Include="Core\Resource.cs" />
+    <Compile Include="Scene\Scene.cs" />
+    <Compile Include="Scene\SceneEntityCamera.cs" />
+    <Compile Include="Scene\SceneEntity.cs" />
     <Compile Include="Core\Util.cs" />
-    <Compile Include="Scene\ANSceneLayer.cs" />
+    <Compile Include="Scene\SceneLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="freetype6.dll">

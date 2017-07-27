@@ -10,7 +10,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace ArtificialNature
 {
-    class ArFileStreamCache : Cache<FileStream>
+    class FileStreamCache : Cache<FileStream>
     {
         public override FileStream Get(string name)
         {
@@ -25,14 +25,14 @@ namespace ArtificialNature
         }
     }
 
-    class ANShaderCache : Cache<ANShader>
+    class ShaderCache : Cache<Shader>
     {
-        public override ANShader Get(string name)
+        public override Shader Get(string name)
         {
-            ANShader result = base.Get(name);
+            Shader result = base.Get(name);
             if (result == null)
             {
-                result = new ANShader() { Name = name };
+                result = new Shader(null, name);
                 Set(name, result);
             }
 
@@ -40,17 +40,17 @@ namespace ArtificialNature
         }
     }
 
-    class ANResources : Singleton<ANResources>
+    class Resources : Singleton<Resources>
     {
-        static ArFileStreamCache s_fileStreamCache = new ArFileStreamCache();
-        static ANShaderCache s_shaderCache = new ANShaderCache();
+        static FileStreamCache s_fileStreamCache = new FileStreamCache();
+        static ShaderCache s_shaderCache = new ShaderCache();
 
         public static FileStream GetFile(string fileName)
         {
             return s_fileStreamCache.Get(fileName);
         }
 
-        public static ANShader GetShader(string name)
+        public static Shader GetShader(string name)
         {
             return s_shaderCache.Get(name);
         }

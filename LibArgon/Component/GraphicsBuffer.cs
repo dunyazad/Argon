@@ -13,14 +13,25 @@ using QuickFont.Configuration;
 
 namespace ArtificialNature
 {
-    public abstract class ANGraphicsBufferBase : ANComponent
+    public abstract class GraphicsBufferBase : Component
     {
         public abstract void BufferData();
+
+        public GraphicsBufferBase(SceneEntity sceneEntity, string name)
+            : base(sceneEntity, name)
+        {
+
+        }
+
+        ~GraphicsBufferBase()
+        {
+
+        }
     }
 
-    public class ANGraphicsBuffer<T> : ANGraphicsBufferBase where T : struct
+    public class GraphicsBuffer<T> : GraphicsBufferBase where T : struct
     {
-        public ANGraphicsBufferArray VAO { get; set; }
+        public GraphicsBufferArray BufferArray { get; set; }
         public int AttributeID { get; private set; }
 
         protected int vbo;
@@ -29,23 +40,39 @@ namespace ArtificialNature
 
         int dataUnitSize;
 
-        public override void OnInitialize()
+        public GraphicsBuffer(SceneEntity sceneEntity, GraphicsBufferArray bufferArray, string name)
+            : base(sceneEntity, name)
         {
-            Datas = new List<T>();
+            BufferArray = bufferArray;
 
             dataUnitSize = System.Runtime.InteropServices.Marshal.SizeOf(default(T));
 
             GL.GenBuffers(1, out vbo);
-            AttributeID = GL.GetAttribLocation(VAO.Shader.Program, Name);
+            AttributeID = GL.GetAttribLocation(BufferArray.Shader.Program, Name);
+        }
+
+        ~GraphicsBuffer()
+        {
+            Datas.Clear();
+
+            try
+            {
+                BufferArray.Bind();
+
+                GL.DeleteBuffer(vbo);
+
+                BufferArray.Unbind();
+            }
+            catch (Exception)
+            {
+                ErrorCode ec = GL.GetError();
+
+                throw;
+            }
         }
 
         public override void OnRender()
         {
-        }
-
-        public override void OnTerminate()
-        {
-            GL.DeleteBuffer(vbo);
         }
 
         public override void OnUpdate(double dt)

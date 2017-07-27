@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 
 namespace ArtificialNature
 {
-    public abstract class ANComponent
+    public abstract class Component : ObjectBase
     {
-        public string Name { get; set; }
-
-        public ANSceneEntity SceneEntity { get; set; }
+        public SceneEntity SceneEntity { get; set; }
 
         protected bool dirty = true;
         public bool Dirty { get { return dirty; } set { dirty = value; if (SceneEntity != null) SceneEntity.Dirty = true; } }
 
-        Dictionary<string, ANComponent> containingComponents = new Dictionary<string, ANComponent>();
+        public Component(SceneEntity sceneEntity, string name)
+            : base(name)
+        {
+            SceneEntity = sceneEntity;
+        }
 
-        public ANComponent()
+        ~Component()
         {
         }
 
-        public abstract void OnInitialize();
         public abstract void OnUpdate(double dt);
         public abstract void OnRender();
-        public abstract void OnTerminate();
     }
 }

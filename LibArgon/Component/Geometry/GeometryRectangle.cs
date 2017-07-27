@@ -13,17 +13,11 @@ using QuickFont.Configuration;
 
 namespace ArtificialNature
 {
-    public class ANGeometryRectangle : ANGraphicsObject
+    public class GeometryRectangle : GraphicsObject
     {
-        public ANGeometryRectangle()
-            : base()
+        public GeometryRectangle(SceneEntity sceneEntity, string name)
+            : base(sceneEntity, name)
         {
-        }
-
-        public override void OnInitialize()
-        {
-            base.OnInitialize();
-
             vboPosition.AddData(new Vector3[] {
                 new Vector3(-0.4f, -0.4f, 0f), new Vector3(0.4f, -0.4f, 0f), new Vector3( 0.4f, 0.4f, 0f),
                 new Vector3(-0.4f, -0.4f, 0f), new Vector3(0.4f,  0.4f, 0f), new Vector3(-0.4f, 0.4f, 0f)
@@ -34,6 +28,11 @@ namespace ArtificialNature
             });
         }
 
+        ~GeometryRectangle()
+        {
+
+        }
+
         public override void OnUpdate(double dt)
         {
             base.OnUpdate(dt);
@@ -42,11 +41,6 @@ namespace ArtificialNature
         public override void OnRender()
         {
             base.OnRender();
-        }
-
-        public override void OnTerminate()
-        {
-            base.OnTerminate();
         }
     }
 }
