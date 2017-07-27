@@ -51,7 +51,7 @@ namespace ArtificialNature
             GL.BindVertexArray(0);
         }
 
-        public GraphicsBuffer<T> CreateBuffer<T>(string name) where T : struct
+        public GraphicsBuffer<T> CreateBuffer<T>(string name, string attributeName) where T : struct
         {
             if (buffers.ContainsKey(name))
             {
@@ -59,7 +59,7 @@ namespace ArtificialNature
             }
             else
             {
-                var vbo = new GraphicsBuffer<T>(SceneEntity, this, name);
+                var vbo = new GraphicsBuffer<T>(SceneEntity, this, name, attributeName);
                 buffers.Add(name, vbo);
                 return vbo;
             }

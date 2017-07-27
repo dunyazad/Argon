@@ -15,9 +15,10 @@ namespace ArtificialNature
 {
     public abstract class GraphicsBufferBase : Component
     {
+        public string AttributeName { get; set; }
         public abstract void BufferData();
 
-        public GraphicsBufferBase(SceneEntity sceneEntity, string name)
+        public GraphicsBufferBase(SceneEntity sceneEntity, string name, string attributeName)
             : base(sceneEntity, name)
         {
 
@@ -42,15 +43,15 @@ namespace ArtificialNature
 
         VertexAttribPointerType pointerType;
 
-        public GraphicsBuffer(SceneEntity sceneEntity, GraphicsBufferArray bufferArray, string name)
-            : base(sceneEntity, name)
+        public GraphicsBuffer(SceneEntity sceneEntity, GraphicsBufferArray bufferArray, string name, string attributeName)
+            : base(sceneEntity, name, attributeName)
         {
             BufferArray = bufferArray;
 
             dataUnitSize = System.Runtime.InteropServices.Marshal.SizeOf(default(T));
 
             GL.GenBuffers(1, out vbo);
-            AttributeID = GL.GetAttribLocation(BufferArray.Shader.Program, Name);
+            AttributeID = GL.GetAttribLocation(BufferArray.Shader.Program, attributeName);
 
             if(typeof(T) == typeof(sbyte))
             {

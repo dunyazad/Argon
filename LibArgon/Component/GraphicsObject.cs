@@ -28,8 +28,8 @@ namespace ArtificialNature
             materials.Add(material);
 
             bufferArray = new GraphicsBufferArray(entity, material.Shader, "Default");
-            vboPosition = bufferArray.CreateBuffer<Vector3>("vPosition");
-            vboColor = bufferArray.CreateBuffer<Vector4>("vColor");
+            vboPosition = bufferArray.CreateBuffer<Vector3>("vertex buffer", "vPosition");
+            vboColor = bufferArray.CreateBuffer<Vector4>("color buffer", "vColor");
 
             Console.WriteLine("GraphicsObject Ctor");
         }
