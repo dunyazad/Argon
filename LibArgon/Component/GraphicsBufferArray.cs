@@ -30,9 +30,6 @@ namespace ArtificialNature
 
         ~GraphicsBufferArray()
         {
-            buffers.Clear();
-
-            GL.DeleteVertexArray(vao);
         }
 
         public override void OnUpdate(double dt)
@@ -54,7 +51,7 @@ namespace ArtificialNature
             GL.BindVertexArray(0);
         }
 
-        public GraphicsBuffer<T> CreateVBO<T>(string name) where T : struct
+        public GraphicsBuffer<T> CreateBuffer<T>(string name) where T : struct
         {
             if (buffers.ContainsKey(name))
             {
@@ -76,6 +73,18 @@ namespace ArtificialNature
                 kvp.Value.BufferData();
             }
             Unbind();
+        }
+
+        public override void CleanUp()
+        {
+            foreach (var kvp in buffers)
+            {
+                kvp.Value.CleanUp();
+            }
+
+            buffers.Clear();
+
+            GL.DeleteVertexArray(vao);
         }
     }
 }

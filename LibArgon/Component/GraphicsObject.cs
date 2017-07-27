@@ -24,21 +24,18 @@ namespace ArtificialNature
         public GraphicsObject(SceneEntity entity, string name)
             : base(entity, name)
         {
-            {
-                var material = new Material(SceneEntity, "Default");
-                materials.Add(material);
+            var material = new Material(SceneEntity, "Default");
+            materials.Add(material);
 
-                bufferArray = new GraphicsBufferArray(entity, material.Shader, "Default");
-                vboPosition = bufferArray.CreateVBO<Vector3>("vPosition");
-                vboColor = bufferArray.CreateVBO<Vector4>("vColor");
-            }
+            bufferArray = new GraphicsBufferArray(entity, material.Shader, "Default");
+            vboPosition = bufferArray.CreateBuffer<Vector3>("vPosition");
+            vboColor = bufferArray.CreateBuffer<Vector4>("vColor");
 
             Console.WriteLine("GraphicsObject Ctor");
         }
 
         ~GraphicsObject()
         {
-            materials.Clear();
         }
 
         public override void OnUpdate(double dt)
@@ -94,6 +91,16 @@ namespace ArtificialNature
             materials[0].Shader.Unuse();
 
             Console.WriteLine("Geometry OnRender");
+        }
+
+        public override void CleanUp()
+        {
+            foreach (var material in materials)
+            {
+                material.CleanUp();
+            }
+
+            materials.Clear();
         }
     }
 }

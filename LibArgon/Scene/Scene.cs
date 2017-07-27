@@ -92,5 +92,10 @@ namespace ArtificialNature
                 return null;
             }
         }
+
+        public override void CleanUp()
+        {
+            RootEntity.CleanUp();
+        }
     }
 }

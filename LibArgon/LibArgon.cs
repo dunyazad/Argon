@@ -94,6 +94,11 @@ namespace ArtificialNature
         {
             base.OnClosing(e);
 
+            foreach (var kvp in scenes)
+            {
+                kvp.Value.CleanUp();
+            }
+
             scenes.Clear();
         }
 

@@ -53,22 +53,6 @@ namespace ArtificialNature
 
         ~GraphicsBuffer()
         {
-            Datas.Clear();
-
-            try
-            {
-                BufferArray.Bind();
-
-                GL.DeleteBuffer(vbo);
-
-                BufferArray.Unbind();
-            }
-            catch (Exception)
-            {
-                ErrorCode ec = GL.GetError();
-
-                throw;
-            }
         }
 
         public override void OnRender()
@@ -115,6 +99,13 @@ namespace ArtificialNature
             GL.BufferData<T>(BufferTarget.ArrayBuffer, (IntPtr)(Datas.Count * dataUnitSize), Datas.ToArray(), BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(AttributeID, dataUnitSize / sizeof(float), VertexAttribPointerType.Float, false, 0, 0);
             Unbind();
+        }
+
+        public override void CleanUp()
+        {
+            Datas.Clear();
+
+            GL.DeleteBuffer(vbo);
         }
     }
 }

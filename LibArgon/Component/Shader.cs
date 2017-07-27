@@ -81,11 +81,7 @@ namespace ArtificialNature
 
         ~Shader()
         {
-            AttributeIDs.Clear();
-
-            UniformIDs.Clear();
-
-            GL.DeleteProgram(program);
+            
         }
 
         public override void OnUpdate(double dt)
@@ -172,6 +168,15 @@ namespace ArtificialNature
         public void SetUniformMatrix4(string uniformName, bool transpose, ref Matrix4 value)
         {
             GL.UniformMatrix4(GetUniformID(uniformName), transpose, ref value);
+        }
+
+        public override void CleanUp()
+        {
+            AttributeIDs.Clear();
+
+            UniformIDs.Clear();
+
+            GL.DeleteProgram(program);
         }
     }
 }

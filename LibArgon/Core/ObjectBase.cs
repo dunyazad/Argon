@@ -15,5 +15,7 @@ namespace ArtificialNature
         {
             Name = name;
         }
+
+        public abstract void CleanUp();
     }
 }

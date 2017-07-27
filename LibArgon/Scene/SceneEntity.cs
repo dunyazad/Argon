@@ -58,9 +58,6 @@ namespace ArtificialNature
 
         ~SceneEntity()
         {
-            childEntities.Clear();
-
-            components.Clear();
         }
 
         public override void Update(double dt)
@@ -119,6 +116,21 @@ namespace ArtificialNature
             {
                 components.Add(component);
             }
+        }
+
+        public override void CleanUp()
+        {
+            foreach (var kvp in childEntities)
+            {
+                kvp.Value.CleanUp();
+            }
+            childEntities.Clear();
+
+            foreach (var component in components)
+            {
+                component.CleanUp();
+            }
+            components.Clear();
         }
     }
 }

@@ -27,5 +27,9 @@ namespace ArtificialNature
         public override void OnRender()
         {
         }
+
+        public override void CleanUp()
+        {
+        }
     }
 }
