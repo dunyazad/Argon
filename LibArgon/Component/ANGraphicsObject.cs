@@ -32,7 +32,7 @@ namespace ArtificialNature
                 var material = new ANMaterial() { Name = "Default" };
                 materials.Add(material);
 
-                bufferArray = material.Shader.CreateVAO("Default");
+                bufferArray = material.Shader.GetBufferArray("Default");
                 vboPosition = bufferArray.CreateVBO<Vector3>("vPosition");
                 vboColor = bufferArray.CreateVBO<Vector4>("vColor");
             }
@@ -41,9 +41,6 @@ namespace ArtificialNature
             {
                 material.OnInitialize();
             }
-
-            //vboPosition.AddData(new Vector3[] { new Vector3(-0.8f, -0.8f, 0f), new Vector3(0.8f, -0.8f, 0f), new Vector3(0f, 0.8f, 0f) });
-            //vboColor.AddData(new Vector4[] { new Vector4(1f, 0f, 0f, 0.5f), new Vector4(0f, 0f, 1f, 1f), new Vector4(0f, 1f, 0f, 1f) });
 
             Console.WriteLine("ANGeometry OnInitialize");
         }

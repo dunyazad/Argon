@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Text;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -19,8 +20,8 @@ namespace ArtificialNature
         public int Program { get { return program; } private set { } }
 
         Dictionary<string, ANGraphicsBufferArray> vaos = new Dictionary<string, ANGraphicsBufferArray>();
-
-        Dictionary<string, int> uniformIDs = new Dictionary<string, int>();
+        public Dictionary<string, int> UniformIDs { get; private set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> AttributeIDs { get; private set; } = new Dictionary<string, int>();
 
         public override void OnInitialize()
         {
@@ -52,6 +53,33 @@ namespace ArtificialNature
                 GL.LinkProgram(program);
                 GL.DetachShader(program, vs);
                 GL.DetachShader(program, fs);
+
+
+                int attributeCount;
+                GL.GetProgramInterface(program, ProgramInterface.ProgramInput, ProgramInterfaceParameter.ActiveResources, out attributeCount);
+                for (int i = 0; i < attributeCount; i++)
+                {
+                    int size;
+                    int length;
+                    ActiveAttribType type;
+                    StringBuilder name = new StringBuilder();
+
+                    GL.GetActiveAttrib(program, i, (int)ProgramInterfaceParameter.MaxNameLength, out length, out size, out type, name);
+                    AttributeIDs.Add(name.ToString(), i);
+                }
+
+                int uniformCount;
+                GL.GetProgramInterface(program, ProgramInterface.Uniform, ProgramInterfaceParameter.ActiveResources, out uniformCount);
+                for (int i = 0; i < uniformCount; i++)
+                {
+                    int size;
+                    int length;
+                    ActiveUniformType type;
+                    StringBuilder name = new StringBuilder();
+
+                    GL.GetActiveUniform(program, i, (int)ProgramInterfaceParameter.MaxNameLength, out length, out size, out type, name);
+                    UniformIDs.Add(name.ToString(), i);
+                }
 
                 foreach (var kvp in vaos)
                 {
@@ -88,7 +116,7 @@ namespace ArtificialNature
             GL.UseProgram(0);
         }
 
-        public ANGraphicsBufferArray CreateVAO(string name)
+        public ANGraphicsBufferArray GetBufferArray(string name)
         {
             if(vaos.ContainsKey(name))
             {
@@ -104,24 +132,27 @@ namespace ArtificialNature
 
         int GetUniformID(string uniformName)
         {
-            if(uniformIDs.ContainsKey(uniformName))
+            if(UniformIDs.ContainsKey(uniformName))
             {
-                return uniformIDs[uniformName];
+                return UniformIDs[uniformName];
             }
             else
             {
-                int uniformID = GL.GetUniformLocation(program, uniformName);
-                uniformIDs[uniformName] = uniformID;
-                return uniformID;
+                return -1;
             }
         }
 
-        //public void SetAttribute(string attributeName, int size, VertexAttribPointerType type, int stride, int offset)
-        //{
-        //    // get location of attribute from shader program
-        //    int index = GL.GetAttribLocation(program, attributeName);
-        //    GL.VertexAttribPointer(index, size, type, false, stride, offset);
-        //}
+        int AttributeID(string attributeName)
+        {
+            if (AttributeIDs.ContainsKey(attributeName))
+            {
+                return AttributeIDs[attributeName];
+            }
+            else
+            {
+                return -1;
+            }
+        }
 
         public void SetUniformVector2(string uniformName, ref Vector2 value)
         {

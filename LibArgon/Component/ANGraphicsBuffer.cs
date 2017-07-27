@@ -25,7 +25,7 @@ namespace ArtificialNature
 
         protected int vbo;
 
-        public List<T> Datas { get; set; }
+        public List<T> Datas { get; set; } = new List<T>();
 
         int dataUnitSize;
 
