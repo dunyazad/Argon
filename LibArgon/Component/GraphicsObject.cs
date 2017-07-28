@@ -65,6 +65,24 @@ namespace ArtificialNature
 
                     var mvp = modelMatrix * viewMatrix * projectionMatrix;
                     material.Shader.SetUniformMatrix4("mvp", false, ref mvp);
+
+                    if (material.Textures.Count > 0)
+                    {
+                        for (int i = 0; i < material.Textures.Count; i++)
+                        {
+                            int index = (int)TextureUnit.Texture0;
+                            TextureUnit textureUnit = (TextureUnit)(index + i);
+                            GL.ActiveTexture(textureUnit);
+
+                            GL.BindTexture(TextureTarget.Texture2D, material.Textures[i].TextureID);
+                            material.Shader.SetUniform1(textureUnit.ToString(), i);
+                            material.Shader.SetUniform1("useTexture" + i.ToString(), 1);
+                        }
+                    }
+                    else
+                    {
+                        material.Shader.SetUniform1("useTexture0", -1);
+                    }
                 }
 
                 material.Shader.Render(BufferArrays.ToArray());

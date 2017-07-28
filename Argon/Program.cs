@@ -25,8 +25,10 @@ namespace ArtificialNature
                 entity2.LocalPosition = new Vector3(-1, 0, 0);
 
                 var entity3 = scene.CreateSceneEntity("Rectangle");
-                entity3.AddComponent(new GeometryRectangle("Rectangle"));
+                var rectangle = new GeometryRectangle("Rectangle");
+                entity3.AddComponent(rectangle);
                 entity3.LocalPosition = new Vector3(0, 2, 0);
+                rectangle.Materials[0].Textures.Add(new Texture("Satellite.jpg"));
 
                 var entity4 = scene.CreateSceneEntity("Circle");
                 entity4.AddComponent(new GeometryCircle("Circle", 0.5f, 36));

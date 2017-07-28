@@ -137,6 +137,42 @@ namespace ArtificialNature
             }
         }
 
+        public void SetUniform1(string uniformName, int value)
+        {
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.Uniform1(uniformID, value);
+                }
+            }
+        }
+
+        public void SetUniform1(string uniformName, float value)
+        {
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.Uniform1(uniformID, value);
+                }
+            }
+        }
+
+        public void SetUniform1(string uniformName, double value)
+        {
+            if (UniformIDs.ContainsKey(uniformName))
+            {
+                int uniformID = UniformIDs[uniformName];
+                if (uniformID != -1)
+                {
+                    GL.Uniform1(uniformID, value);
+                }
+            }
+        }
+
         public void SetUniformVector2(string uniformName, ref Vector2 value)
         {
             if (UniformIDs.ContainsKey(uniformName))

@@ -57,6 +57,7 @@
     <Compile Include="Component\GraphicsBuffer.cs" />
     <Compile Include="Component\Geometry\GeometryRectangle.cs" />
     <Compile Include="Component\Geometry\GeometryTriangle.cs" />
+    <Compile Include="Component\Texture.cs" />
     <Compile Include="Core\Component.cs" />
     <Compile Include="Component\GraphicsBufferArray.cs" />
     <Compile Include="Core\ObjectBase.cs" />
@@ -74,8 +75,14 @@
     <Content Include="freetype6.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resource\Shader\Default.fs">
+    <Content Include="Resource\Image\Satellite.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Shader\Default.fs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource\Shader\Textured.fs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="woodenFont.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -98,7 +105,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Resource\Shader\Default.vs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resource\Shader\Textured.vs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="woodenFont.qfont">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

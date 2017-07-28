@@ -10,6 +10,8 @@ namespace ArtificialNature
     {
         public Shader Shader { get; set; } = Resources.GetShader("Default");
 
+        public List<Texture> Textures { get; protected set; } = new List<Texture>();
+
         public Material(string name)
             : base(name)
         {
