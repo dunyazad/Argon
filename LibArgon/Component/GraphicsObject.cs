@@ -67,9 +67,7 @@ namespace ArtificialNature
                     material.Shader.SetUniformMatrix4("mvp", false, ref mvp);
                 }
 
-
                 material.Shader.Render(BufferArrays.ToArray());
-
 
                 material.Shader.Unuse();
             }

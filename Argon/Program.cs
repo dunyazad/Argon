@@ -31,7 +31,8 @@ namespace ArtificialNature
                 var entity4 = scene.CreateSceneEntity("Circle");
                 entity4.AddComponent(new GeometryCircle("Circle", 0.5f, 36));
                 entity4.LocalPosition = new Vector3(0, -2, 0);
-                entity4.PolygonMode = OpenTK.Graphics.OpenGL4.PolygonMode.Line;
+                //entity4.PolygonMode = OpenTK.Graphics.OpenGL4.PolygonMode.Line;
+
                 argon.Run();
                 //argon.Run(30, 30);
             }
