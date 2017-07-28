@@ -19,7 +19,7 @@ namespace ArtificialNature
 
         protected int vao;
 
-        Dictionary<string, GraphicsBufferBase> buffers = new Dictionary<string, GraphicsBufferBase>();
+        public Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase> Buffers { get; private set; } = new Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase>();
 
         public GraphicsBufferArray(SceneEntity sceneEntity, Shader shader, string name)
             : base(sceneEntity, name)
@@ -40,6 +40,40 @@ namespace ArtificialNature
         {
         }
 
+        public void Render(Shader shader)
+        {
+            Bind();
+
+            foreach (var kvp in Buffers)
+            {
+                int attributeID = shader.AttributeIDs[kvp.Value.AttributeName];
+                if (attributeID != -1)
+                {
+                    GL.EnableVertexAttribArray(attributeID);
+                }
+            }
+
+            if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+            {
+                //GL.DrawArrays(PrimitiveType.Triangles, 0, vboPosition.Datas.Count);
+            }
+            else
+            {
+                GL.DrawArrays(PrimitiveType.Triangles, 0, Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount());
+            }
+
+            foreach (var kvp in Buffers)
+            {
+                int attributeID = shader.AttributeIDs[kvp.Value.AttributeName];
+                if (attributeID != -1)
+                {
+                    GL.DisableVertexAttribArray(attributeID);
+                }
+            }
+
+
+            Unbind();
+        }
         
         public void Bind()
         {
@@ -51,16 +85,16 @@ namespace ArtificialNature
             GL.BindVertexArray(0);
         }
 
-        public GraphicsBuffer<T> CreateBuffer<T>(string name, string attributeName) where T : struct
+        public GraphicsBuffer<T> CreateBuffer<T>(string attributeName, GraphicsBufferBase.BufferType bufferType) where T : struct
         {
-            if (buffers.ContainsKey(name))
+            if (Buffers.ContainsKey(bufferType))
             {
-                return buffers[name] as GraphicsBuffer<T>;
+                return Buffers[bufferType] as GraphicsBuffer<T>;
             }
             else
             {
-                var vbo = new GraphicsBuffer<T>(SceneEntity, this, name, attributeName);
-                buffers.Add(name, vbo);
+                var vbo = new GraphicsBuffer<T>(this, bufferType.ToString(), attributeName, bufferType);
+                Buffers.Add(bufferType, vbo);
                 return vbo;
             }
         }
@@ -68,7 +102,7 @@ namespace ArtificialNature
         public void BufferData()
         {
             Bind();
-            foreach (var kvp in buffers)
+            foreach (var kvp in Buffers)
             {
                 kvp.Value.BufferData();
             }
@@ -77,12 +111,12 @@ namespace ArtificialNature
 
         public override void CleanUp()
         {
-            foreach (var kvp in buffers)
+            foreach (var kvp in Buffers)
             {
                 kvp.Value.CleanUp();
             }
 
-            buffers.Clear();
+            Buffers.Clear();
 
             GL.DeleteVertexArray(vao);
         }

@@ -15,13 +15,22 @@ namespace ArtificialNature
 {
     public abstract class GraphicsBufferBase : Component
     {
+        public enum BufferType { Vertex, Index, Normal, Color, UV, Other };
+        BufferType bufferType = BufferType.Other;
+
+        public GraphicsBufferArray BufferArray { get; set; }
+
         public string AttributeName { get; set; }
         public abstract void BufferData();
 
-        public GraphicsBufferBase(SceneEntity sceneEntity, string name, string attributeName)
-            : base(sceneEntity, name)
-        {
+        public abstract int DataCount();
 
+        public GraphicsBufferBase(GraphicsBufferArray bufferArray, string name, string attributeName, BufferType bufferType)
+            : base(bufferArray.SceneEntity, name)
+        {
+            BufferArray = bufferArray;
+            AttributeName = attributeName;
+            this.bufferType = bufferType;
         }
 
         ~GraphicsBufferBase()
@@ -32,7 +41,6 @@ namespace ArtificialNature
 
     public class GraphicsBuffer<T> : GraphicsBufferBase where T : struct
     {
-        public GraphicsBufferArray BufferArray { get; set; }
         public int AttributeID { get; private set; }
 
         protected int vbo;
@@ -43,8 +51,8 @@ namespace ArtificialNature
 
         VertexAttribPointerType pointerType;
 
-        public GraphicsBuffer(SceneEntity sceneEntity, GraphicsBufferArray bufferArray, string name, string attributeName)
-            : base(sceneEntity, name, attributeName)
+        public GraphicsBuffer(GraphicsBufferArray bufferArray, string name, string attributeName, BufferType bufferType)
+            : base(bufferArray, name, attributeName, bufferType)
         {
             BufferArray = bufferArray;
 
@@ -105,6 +113,11 @@ namespace ArtificialNature
 
         public override void OnUpdate(double dt)
         {
+        }
+
+        public override int DataCount()
+        {
+            return Datas.Count;
         }
 
         public void Bind()

@@ -16,8 +16,8 @@ namespace ArtificialNature
     public class GraphicsObject : Component
     {
         protected List<Material> materials = new List<Material>();
-        
-        protected GraphicsBufferArray bufferArray;
+
+        protected List<GraphicsBufferArray> bufferArrays = new List<GraphicsBufferArray>();
         protected GraphicsBuffer<Vector3> vboPosition;
         protected GraphicsBuffer<Vector4> vboColor;
 
@@ -27,9 +27,10 @@ namespace ArtificialNature
             var material = new Material(SceneEntity, "Default");
             materials.Add(material);
 
-            bufferArray = new GraphicsBufferArray(entity, material.Shader, "Default");
-            vboPosition = bufferArray.CreateBuffer<Vector3>("vertex buffer", "vPosition");
-            vboColor = bufferArray.CreateBuffer<Vector4>("color buffer", "vColor");
+            var bufferArray = new GraphicsBufferArray(entity, material.Shader, "Default");
+            bufferArrays.Add(bufferArray);
+            vboPosition = bufferArray.CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
+            vboColor = bufferArray.CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
 
             Console.WriteLine("GraphicsObject Ctor");
         }
@@ -44,7 +45,7 @@ namespace ArtificialNature
             {
                 foreach (var material in materials)
                 {
-                    material.Shader.BufferData(bufferArray);
+                    material.Shader.BufferData(bufferArrays.ToArray());
                 }
 
                 Console.WriteLine("Geometry OnUpdate, dt : " + dt.ToString());
@@ -55,39 +56,30 @@ namespace ArtificialNature
 
         public override void OnRender()
         {
-            materials[0].Shader.Use();
+            foreach (var material in materials)
+            {
+                material.Shader.Use();
 
-            bufferArray.Bind();
+                {
+                    var modelMatrix = SceneEntity.WorldMatrix;
+                    material.Shader.SetUniformMatrix4("model", false, ref modelMatrix);
 
-            vboPosition.Enable();
-            vboColor.Enable();
+                    var viewMatrix = SceneEntity.Scene.MainCamera.ViewMatrix;
+                    material.Shader.SetUniformMatrix4("view", false, ref viewMatrix);
 
+                    var projectionMatrix = SceneEntity.Scene.MainCamera.ProjectionMatrix;
+                    material.Shader.SetUniformMatrix4("projection", false, ref projectionMatrix);
 
-
-            var modelMatrix = SceneEntity.WorldMatrix;
-            materials[0].Shader.SetUniformMatrix4("model", false, ref modelMatrix);
-
-            var viewMatrix = SceneEntity.Scene.MainCamera.ViewMatrix;
-            materials[0].Shader.SetUniformMatrix4("view", false, ref viewMatrix);
-
-            var projectionMatrix = SceneEntity.Scene.MainCamera.ProjectionMatrix;
-            materials[0].Shader.SetUniformMatrix4("projection", false, ref projectionMatrix);
-
-            var mvp = modelMatrix * viewMatrix * projectionMatrix;
-            materials[0].Shader.SetUniformMatrix4("mvp", false, ref mvp);
-            
+                    var mvp = modelMatrix * viewMatrix * projectionMatrix;
+                    material.Shader.SetUniformMatrix4("mvp", false, ref mvp);
+                }
 
 
-
-            GL.DrawArrays(PrimitiveType.Triangles, 0, vboPosition.Datas.Count);
-
-            vboPosition.Disable();
-            vboColor.Disable();
+                material.Shader.Render(bufferArrays.ToArray());
 
 
-            bufferArray.Unbind();
-
-            materials[0].Shader.Unuse();
+                material.Shader.Unuse();
+            }
 
             Console.WriteLine("Geometry OnRender");
         }
