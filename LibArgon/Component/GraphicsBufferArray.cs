@@ -43,16 +43,27 @@ namespace ArtificialNature
 
             foreach (var kvp in Buffers)
             {
-                int attributeID = shader.AttributeIDs[kvp.Value.AttributeName];
-                if (attributeID != -1)
+                if (shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
                 {
-                    GL.EnableVertexAttribArray(attributeID);
+                    int attributeID = shader.AttributeIDs[kvp.Value.AttributeName];
+                    if (attributeID != -1)
+                    {
+                        GL.EnableVertexAttribArray(attributeID);
+                    }
+                }
+                else
+                {
+                    if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                    {
+                        Buffers[GraphicsBufferBase.BufferType.Index].Bind();
+                    }
                 }
             }
 
             if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
             {
-                //GL.DrawArrays(PrimitiveType.Triangles, 0, vboPosition.Datas.Count);
+                //GL.DrawElements<uint>(PrimitiveType.Triangles, 3, DrawElementsType.UnsignedInt, (Buffers[GraphicsBufferBase.BufferType.Index]as GraphicsBuffer<uint>).Datas.ToArray());
+                GL.DrawElements(PrimitiveType.Triangles, Buffers[GraphicsBufferBase.BufferType.Index].DataCount(), DrawElementsType.UnsignedInt, 0);
             }
             else
             {
@@ -61,13 +72,21 @@ namespace ArtificialNature
 
             foreach (var kvp in Buffers)
             {
-                int attributeID = shader.AttributeIDs[kvp.Value.AttributeName];
-                if (attributeID != -1)
+                if (shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
                 {
-                    GL.DisableVertexAttribArray(attributeID);
+                    int attributeID = shader.AttributeIDs[kvp.Value.AttributeName];
+                    if (attributeID != -1)
+                    {
+                        GL.DisableVertexAttribArray(attributeID);
+                    }
+                }
+                {
+                    if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                    {
+                        Buffers[GraphicsBufferBase.BufferType.Index].Unbind();
+                    }
                 }
             }
-
 
             Unbind();
         }

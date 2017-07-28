@@ -15,22 +15,15 @@ namespace ArtificialNature
 {
     public class GraphicsObject : Component
     {
-        protected List<Material> materials = new List<Material>();
+        public List<Material> Materials { get; set; } = new List<Material>();
 
-        protected List<GraphicsBufferArray> bufferArrays = new List<GraphicsBufferArray>();
-        protected GraphicsBuffer<Vector3> vboPosition;
-        protected GraphicsBuffer<Vector4> vboColor;
+        public List<GraphicsBufferArray> BufferArrays = new List<GraphicsBufferArray>() { new GraphicsBufferArray("Default") };
 
         public GraphicsObject(string name)
             : base(name)
         {
             var material = new Material("Default");
-            materials.Add(material);
-
-            var bufferArray = new GraphicsBufferArray("Default");
-            bufferArrays.Add(bufferArray);
-            vboPosition = bufferArray.CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
-            vboColor = bufferArray.CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
+            Materials.Add(material);
 
             Console.WriteLine("GraphicsObject Ctor");
         }
@@ -43,9 +36,9 @@ namespace ArtificialNature
         {
             if (Dirty)
             {
-                foreach (var material in materials)
+                foreach (var material in Materials)
                 {
-                    material.Shader.BufferData(bufferArrays.ToArray());
+                    material.Shader.BufferData(BufferArrays.ToArray());
                 }
 
                 Console.WriteLine("Geometry OnUpdate, dt : " + dt.ToString());
@@ -56,7 +49,7 @@ namespace ArtificialNature
 
         public override void OnRender(SceneEntity entity)
         {
-            foreach (var material in materials)
+            foreach (var material in Materials)
             {
                 material.Shader.Use();
 
@@ -75,7 +68,7 @@ namespace ArtificialNature
                 }
 
 
-                material.Shader.Render(bufferArrays.ToArray());
+                material.Shader.Render(BufferArrays.ToArray());
 
 
                 material.Shader.Unuse();
@@ -86,12 +79,12 @@ namespace ArtificialNature
 
         public override void CleanUp()
         {
-            foreach (var material in materials)
+            foreach (var material in Materials)
             {
                 material.CleanUp();
             }
 
-            materials.Clear();
+            Materials.Clear();
         }
     }
 }

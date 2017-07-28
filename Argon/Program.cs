@@ -16,18 +16,22 @@ namespace ArtificialNature
                 scene.OnUpdate += Scene_OnUpdate;
 
                 var entity = scene.CreateSceneEntity("Triangle");
-                entity.AddComponent(new GeometryTriangle(entity, "Triangle"));
+                entity.AddComponent(new GeometryTriangle("Triangle"));
                 entity.LocalPosition = new Vector3(1, 0, 0);
                 //entity.OnUpdate += Entity_OnUpdate;
 
                 var entity2 = scene.CreateSceneEntity("Triangle2");
-                entity2.AddComponent(new GeometryTriangle(entity2, "Triangle2"));
+                entity2.AddComponent(new GeometryTriangle("Triangle2"));
                 entity2.LocalPosition = new Vector3(-1, 0, 0);
 
                 var entity3 = scene.CreateSceneEntity("Rectangle");
-                entity3.AddComponent(new GeometryRectangle(entity3, "Rectangle"));
+                entity3.AddComponent(new GeometryRectangle("Rectangle"));
                 entity3.LocalPosition = new Vector3(0, 2, 0);
 
+                var entity4 = scene.CreateSceneEntity("Circle");
+                entity4.AddComponent(new GeometryCircle("Circle", 0.5f, 36));
+                entity4.LocalPosition = new Vector3(0, -2, 0);
+                entity4.PolygonMode = OpenTK.Graphics.OpenGL4.PolygonMode.Line;
                 argon.Run();
                 //argon.Run(30, 30);
             }
@@ -47,6 +51,7 @@ namespace ArtificialNature
                 scene.FindeSceneEntity("Triangle").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
                 scene.FindeSceneEntity("Triangle2").LocalRotation *= Quaternion.FromAxisAngle(-Vector3.UnitY, MathHelper.DegreesToRadians((float)dt * 100));
                 scene.FindeSceneEntity("Rectangle").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians((float)dt * 100));
+                scene.FindeSceneEntity("Circle").LocalRotation *= Quaternion.FromAxisAngle(Vector3.UnitX, MathHelper.DegreesToRadians((float)dt * 100));
             }
         }
     }

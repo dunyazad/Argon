@@ -18,6 +18,9 @@ namespace ArtificialNature
         public GeometryRectangle(string name)
             : base(name)
         {
+            var vboPosition = BufferArrays[0].CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
+            var vboColor = BufferArrays[0].CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
+
             vboPosition.AddData(new Vector3[] {
                 new Vector3(-0.4f, -0.4f, 0f), new Vector3(0.4f, -0.4f, 0f), new Vector3( 0.4f, 0.4f, 0f),
                 new Vector3(-0.4f, -0.4f, 0f), new Vector3(0.4f,  0.4f, 0f), new Vector3(-0.4f, 0.4f, 0f)

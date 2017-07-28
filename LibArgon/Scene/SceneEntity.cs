@@ -13,6 +13,27 @@ namespace ArtificialNature
 {
     public class SceneEntity : SceneObject
     {
+        static PolygonMode s_polygonMode = PolygonMode.Fill;
+        static PolygonMode s_lastPolygonMode;
+        static void SetPolygonMode(PolygonMode polygonMode)
+        {
+            if(s_polygonMode != polygonMode)
+            {
+                s_polygonMode = polygonMode;
+                GL.PolygonMode(MaterialFace.FrontAndBack, polygonMode);
+            }
+        }
+
+        static void PushPolygonMode()
+        {
+            s_lastPolygonMode = s_polygonMode;
+        }
+
+        static void PopPolygonMode()
+        {
+            SetPolygonMode(s_lastPolygonMode);
+        }
+
         protected SceneEntity parent = null;
         public SceneEntity Parent
         {
@@ -50,6 +71,7 @@ namespace ArtificialNature
         protected bool dirty = true;
         public bool Dirty { get { return dirty; } set { dirty = value; if (Parent != null) Parent.Dirty = true; } }
 
+        public PolygonMode PolygonMode { get; set; } = PolygonMode.Fill;
 
         public SceneEntity(Scene scene, string name)
             : base(scene, name)
@@ -105,6 +127,9 @@ namespace ArtificialNature
 
         public override void Render()
         {
+            PushPolygonMode();
+            SetPolygonMode(PolygonMode);
+
             base.Render();
 
             foreach (var kvp in childEntities)
@@ -116,6 +141,8 @@ namespace ArtificialNature
             {
                 component.OnRender(this);
             }
+
+            PopPolygonMode();
         }
 
         public void AddComponent(Component component)

@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Component\Geometry\GeometryCircle.cs" />
     <Compile Include="Component\Material.cs" />
     <Compile Include="Component\GraphicsObject.cs" />
     <Compile Include="Component\Shader.cs" />
