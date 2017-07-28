@@ -21,8 +21,8 @@ namespace ArtificialNature
         public Dictionary<string, int> UniformIDs { get; private set; } = new Dictionary<string, int>();
         public Dictionary<string, int> AttributeIDs { get; private set; } = new Dictionary<string, int>();
 
-        public Shader(SceneEntity sceneEntity, string name)
-            : base(sceneEntity, name)
+        public Shader(string name)
+            : base(name)
         {
             var vsFileStream = Resources.GetFile(ShaderRootPath + Name + ".vs");
             string vsCode;
@@ -89,7 +89,7 @@ namespace ArtificialNature
         {
         }
 
-        public override void OnRender()
+        public override void OnRender(SceneEntity entity)
         {
         }
 

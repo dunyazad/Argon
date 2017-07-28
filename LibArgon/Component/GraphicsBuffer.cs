@@ -26,7 +26,7 @@ namespace ArtificialNature
         public abstract int DataCount();
 
         public GraphicsBufferBase(GraphicsBufferArray bufferArray, string name, string attributeName, BufferType bufferType)
-            : base(bufferArray.SceneEntity, name)
+            : base(name)
         {
             BufferArray = bufferArray;
             AttributeName = attributeName;
@@ -104,7 +104,7 @@ namespace ArtificialNature
         {
         }
 
-        public override void OnRender()
+        public override void OnRender(SceneEntity entity)
         {
         }
 

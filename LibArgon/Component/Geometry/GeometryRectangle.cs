@@ -15,8 +15,8 @@ namespace ArtificialNature
 {
     public class GeometryRectangle : GraphicsObject
     {
-        public GeometryRectangle(SceneEntity sceneEntity, string name)
-            : base(sceneEntity, name)
+        public GeometryRectangle(string name)
+            : base(name)
         {
             vboPosition.AddData(new Vector3[] {
                 new Vector3(-0.4f, -0.4f, 0f), new Vector3(0.4f, -0.4f, 0f), new Vector3( 0.4f, 0.4f, 0f),
@@ -38,9 +38,9 @@ namespace ArtificialNature
             base.OnUpdate(dt);
         }
 
-        public override void OnRender()
+        public override void OnRender(SceneEntity entity)
         {
-            base.OnRender();
+            base.OnRender(entity);
         }
     }
 }

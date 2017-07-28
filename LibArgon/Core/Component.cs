@@ -8,15 +8,11 @@ namespace ArtificialNature
 {
     public abstract class Component : ObjectBase
     {
-        public SceneEntity SceneEntity { get; set; }
+        public bool Dirty { get; set; } = true;
 
-        protected bool dirty = true;
-        public bool Dirty { get { return dirty; } set { dirty = value; if (SceneEntity != null) SceneEntity.Dirty = true; } }
-
-        public Component(SceneEntity sceneEntity, string name)
+        public Component(string name)
             : base(name)
         {
-            SceneEntity = sceneEntity;
         }
 
         ~Component()
@@ -24,6 +20,6 @@ namespace ArtificialNature
         }
 
         public abstract void OnUpdate(double dt);
-        public abstract void OnRender();
+        public abstract void OnRender(SceneEntity entity);
     }
 }

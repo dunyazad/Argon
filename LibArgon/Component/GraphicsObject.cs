@@ -21,13 +21,13 @@ namespace ArtificialNature
         protected GraphicsBuffer<Vector3> vboPosition;
         protected GraphicsBuffer<Vector4> vboColor;
 
-        public GraphicsObject(SceneEntity entity, string name)
-            : base(entity, name)
+        public GraphicsObject(string name)
+            : base(name)
         {
-            var material = new Material(SceneEntity, "Default");
+            var material = new Material("Default");
             materials.Add(material);
 
-            var bufferArray = new GraphicsBufferArray(entity, "Default");
+            var bufferArray = new GraphicsBufferArray("Default");
             bufferArrays.Add(bufferArray);
             vboPosition = bufferArray.CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
             vboColor = bufferArray.CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
@@ -54,20 +54,20 @@ namespace ArtificialNature
             }
         }
 
-        public override void OnRender()
+        public override void OnRender(SceneEntity entity)
         {
             foreach (var material in materials)
             {
                 material.Shader.Use();
 
                 {
-                    var modelMatrix = SceneEntity.WorldMatrix;
+                    var modelMatrix = entity.WorldMatrix;
                     material.Shader.SetUniformMatrix4("model", false, ref modelMatrix);
 
-                    var viewMatrix = SceneEntity.Scene.MainCamera.ViewMatrix;
+                    var viewMatrix = entity.Scene.MainCamera.ViewMatrix;
                     material.Shader.SetUniformMatrix4("view", false, ref viewMatrix);
 
-                    var projectionMatrix = SceneEntity.Scene.MainCamera.ProjectionMatrix;
+                    var projectionMatrix = entity.Scene.MainCamera.ProjectionMatrix;
                     material.Shader.SetUniformMatrix4("projection", false, ref projectionMatrix);
 
                     var mvp = modelMatrix * viewMatrix * projectionMatrix;

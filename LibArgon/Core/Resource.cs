@@ -32,7 +32,7 @@ namespace ArtificialNature
             Shader result = base.Get(name);
             if (result == null)
             {
-                result = new Shader(null, name);
+                result = new Shader(name);
                 Set(name, result);
             }
 

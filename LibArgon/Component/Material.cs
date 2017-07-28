@@ -8,11 +8,10 @@ namespace ArtificialNature
 {
     public class Material : Component
     {
-        protected Shader shader = Resources.GetShader("Default");
-        public Shader Shader { get { return shader; } set { shader = value; } }
+        public Shader Shader { get; set; } = Resources.GetShader("Default");
 
-        public Material(SceneEntity sceneEntity, string name)
-            : base(sceneEntity, name)
+        public Material(string name)
+            : base(name)
         {
         }
 
@@ -24,7 +23,7 @@ namespace ArtificialNature
         {
         }
 
-        public override void OnRender()
+        public override void OnRender(SceneEntity entity)
         {
         }
 

@@ -62,6 +62,14 @@ namespace ArtificialNature
 
         public override void Update(double dt)
         {
+            foreach (var component in components)
+            {
+                if (component.Dirty)
+                {
+                    this.Dirty = true;
+                }
+            }
+
             if (Dirty)
             {
                 if (parent == null)
@@ -106,7 +114,7 @@ namespace ArtificialNature
 
             foreach (var component in components)
             {
-                component.OnRender();
+                component.OnRender(this);
             }
         }
 

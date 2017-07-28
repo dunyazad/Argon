@@ -19,8 +19,8 @@ namespace ArtificialNature
 
         public Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase> Buffers { get; private set; } = new Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase>();
 
-        public GraphicsBufferArray(SceneEntity sceneEntity, string name)
-            : base(sceneEntity, name)
+        public GraphicsBufferArray(string name)
+            : base(name)
         {
             GL.GenVertexArrays(1, out vao);
         }
@@ -33,7 +33,7 @@ namespace ArtificialNature
         {
         }
 
-        public override void OnRender()
+        public override void OnRender(SceneEntity entity)
         {
         }
 
