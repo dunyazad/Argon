@@ -21,7 +21,7 @@ namespace ArtificialNature
         public GraphicsBufferArray BufferArray { get; set; }
 
         public string AttributeName { get; set; }
-        public abstract void BufferData();
+        public abstract void BufferData(Shader shader);
 
         public abstract int DataCount();
 
@@ -41,8 +41,6 @@ namespace ArtificialNature
 
     public class GraphicsBuffer<T> : GraphicsBufferBase where T : struct
     {
-        public int AttributeID { get; private set; }
-
         protected int vbo;
 
         public List<T> Datas { get; set; } = new List<T>();
@@ -59,7 +57,6 @@ namespace ArtificialNature
             dataUnitSize = System.Runtime.InteropServices.Marshal.SizeOf(default(T));
 
             GL.GenBuffers(1, out vbo);
-            AttributeID = GL.GetAttribLocation(BufferArray.Shader.Program, attributeName);
 
             if(typeof(T) == typeof(sbyte))
             {
@@ -130,16 +127,6 @@ namespace ArtificialNature
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
 
-        public void Enable()
-        {
-            GL.EnableVertexAttribArray(AttributeID);
-        }
-
-        public void Disable()
-        {
-            GL.DisableVertexAttribArray(AttributeID);
-        }
-
         public void AddData(T data)
         {
             Datas.Add(data);
@@ -150,12 +137,16 @@ namespace ArtificialNature
             this.Datas.AddRange(datas);
         }
 
-        public override void BufferData()
+        public override void BufferData(Shader shader)
         {
-            Bind();
-            GL.BufferData<T>(BufferTarget.ArrayBuffer, (IntPtr)(Datas.Count * dataUnitSize), Datas.ToArray(), BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(AttributeID, dataUnitSize / sizeof(float), pointerType, false, 0, 0);
-            Unbind();
+            int attributeID = shader.AttributeIDs[AttributeName];
+            if (attributeID != -1)
+            {
+                Bind();
+                GL.BufferData<T>(BufferTarget.ArrayBuffer, (IntPtr)(Datas.Count * dataUnitSize), Datas.ToArray(), BufferUsageHint.StaticDraw);
+                GL.VertexAttribPointer(attributeID, dataUnitSize / sizeof(float), pointerType, false, 0, 0);
+                Unbind();
+            }
         }
 
         public override void CleanUp()

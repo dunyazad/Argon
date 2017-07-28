@@ -15,16 +15,13 @@ namespace ArtificialNature
 {
     public class GraphicsBufferArray : Component
     {
-        public Shader Shader { get; set; }
-
         protected int vao;
 
         public Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase> Buffers { get; private set; } = new Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase>();
 
-        public GraphicsBufferArray(SceneEntity sceneEntity, Shader shader, string name)
+        public GraphicsBufferArray(SceneEntity sceneEntity, string name)
             : base(sceneEntity, name)
         {
-            Shader = shader;
             GL.GenVertexArrays(1, out vao);
         }
 
@@ -99,12 +96,12 @@ namespace ArtificialNature
             }
         }
 
-        public void BufferData()
+        public void BufferData(Shader shader)
         {
             Bind();
             foreach (var kvp in Buffers)
             {
-                kvp.Value.BufferData();
+                kvp.Value.BufferData(shader);
             }
             Unbind();
         }

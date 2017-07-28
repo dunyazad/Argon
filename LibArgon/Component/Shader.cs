@@ -62,7 +62,8 @@ namespace ArtificialNature
                 StringBuilder attributeName = new StringBuilder();
 
                 GL.GetActiveAttrib(program, i, (int)ProgramInterfaceParameter.MaxNameLength, out length, out size, out type, attributeName);
-                AttributeIDs.Add(attributeName.ToString(), i);
+
+                AttributeIDs.Add(attributeName.ToString(), GL.GetAttribLocation(program, attributeName.ToString()));
             }
 
             int uniformCount;
@@ -75,7 +76,7 @@ namespace ArtificialNature
                 StringBuilder uniformName = new StringBuilder();
 
                 GL.GetActiveUniform(program, i, (int)ProgramInterfaceParameter.MaxNameLength, out length, out size, out type, uniformName);
-                UniformIDs.Add(uniformName.ToString(), i);
+                UniformIDs.Add(uniformName.ToString(), GL.GetUniformLocation(program, uniformName.ToString()));
             }
         }
 
@@ -106,7 +107,7 @@ namespace ArtificialNature
         {
             GL.UseProgram(program);
 
-            bufferArray.BufferData();
+            bufferArray.BufferData(this);
 
             GL.UseProgram(0);
         }
@@ -117,7 +118,7 @@ namespace ArtificialNature
 
             foreach (var bufferArray in bufferArrays)
             {
-                bufferArray.BufferData();
+                bufferArray.BufferData(this);
             }
 
             GL.UseProgram(0);
