@@ -19,12 +19,6 @@ void main()
 {
     gl_Position = mvp * vec4(vPosition, 1.0);
 	fsUseTexture0 = useTexture0;
-	if(useTexture0 > 0)
-	{
-		color = vec4(1, 1, 1, 1);
-	}
-	else
-	{
-		color = vColor;
-	}
+	uv = vUV;
+	color = vColor;
 }

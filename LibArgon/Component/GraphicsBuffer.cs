@@ -108,6 +108,12 @@ namespace ArtificialNature
                 dataUnitSize = sizeof(double);
                 dataUnitCount = 1;
             }
+            else if (typeof(T) == typeof(Vector2))
+            {
+                pointerType = VertexAttribPointerType.Float;
+                dataUnitSize = sizeof(float);
+                dataUnitCount = 2;
+            }
             else if (typeof(T) == typeof(Vector3))
             {
                 pointerType = VertexAttribPointerType.Float;
