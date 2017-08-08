@@ -103,40 +103,6 @@ namespace ArtificialNature
             GL.UseProgram(0);
         }
 
-        public void BufferData(GraphicsBufferArray bufferArray)
-        {
-            GL.UseProgram(program);
-
-            bufferArray.BufferData(this);
-
-            GL.UseProgram(0);
-        }
-
-        public void BufferData(GraphicsBufferArray[] bufferArrays)
-        {
-            GL.UseProgram(program);
-
-            foreach (var bufferArray in bufferArrays)
-            {
-                bufferArray.BufferData(this);
-            }
-
-            GL.UseProgram(0);
-        }
-
-        public void Render(GraphicsBufferArray bufferArray)
-        {
-            bufferArray.Render(this);
-        }
-
-        public void Render(GraphicsBufferArray[] bufferArrays)
-        {
-            foreach (var bufferArray in bufferArrays)
-            {
-                bufferArray.Render(this);
-            }
-        }
-
         public void SetUniform1(string uniformName, int value)
         {
             if (UniformIDs.ContainsKey(uniformName))

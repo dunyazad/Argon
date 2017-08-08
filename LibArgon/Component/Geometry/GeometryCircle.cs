@@ -34,7 +34,7 @@ namespace ArtificialNature
                 indices.AddData(segments); indices.AddData(i); indices.AddData(i + 1);
             }
             vboPosition.AddData(new Vector3(0, 0, 0));
-            vboColor.AddData(new Vector4(1, 0, 0, 1));
+            vboColor.AddData(new Vector4(2, 2, 2, 1));
 
             indices.AddData(segments); indices.AddData(segments - 1); indices.AddData(0);
         }

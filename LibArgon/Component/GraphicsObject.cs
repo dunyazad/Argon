@@ -36,14 +36,38 @@ namespace ArtificialNature
         {
             foreach (var ba in BufferArrays)
             {
-                ba.OnUpdate(dt);
+                if (!ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                {
+                    ba.CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
+                }
+
+                var indices = ba.Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>;
+                if (indices.DataCount() == 0)
+                {
+                    for (int i = 0; i < ba.Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount(); i++)
+                    {
+                        indices.AddData((uint)i);
+                    }
+                }
             }
 
             if (Dirty)
             {
                 foreach (var material in Materials)
                 {
-                    material.Shader.BufferData(BufferArrays.ToArray());
+                    material.Shader.Use();
+
+                    foreach (var ba in BufferArrays)
+                    {
+                        ba.Bind();
+                        foreach (var kvp in ba.Buffers)
+                        {
+                            kvp.Value.BufferData(material.Shader);
+                        }
+                        ba.Unbind();
+                    }
+
+                    material.Shader.Unuse();
                 }
 
                 Console.WriteLine("Geometry OnUpdate, dt : " + dt.ToString());
@@ -58,39 +82,92 @@ namespace ArtificialNature
             {
                 material.Shader.Use();
 
+
+                #region Set Uniform To Shader
+                var modelMatrix = entity.WorldMatrix;
+                material.Shader.SetUniformMatrix4("model", false, ref modelMatrix);
+
+                var viewMatrix = entity.Scene.MainCamera.ViewMatrix;
+                material.Shader.SetUniformMatrix4("view", false, ref viewMatrix);
+
+                var projectionMatrix = entity.Scene.MainCamera.ProjectionMatrix;
+                material.Shader.SetUniformMatrix4("projection", false, ref projectionMatrix);
+
+                var mvp = modelMatrix * viewMatrix * projectionMatrix;
+                material.Shader.SetUniformMatrix4("mvp", false, ref mvp);
+
+                if (material.Textures.Count > 0)
                 {
-                    var modelMatrix = entity.WorldMatrix;
-                    material.Shader.SetUniformMatrix4("model", false, ref modelMatrix);
-
-                    var viewMatrix = entity.Scene.MainCamera.ViewMatrix;
-                    material.Shader.SetUniformMatrix4("view", false, ref viewMatrix);
-
-                    var projectionMatrix = entity.Scene.MainCamera.ProjectionMatrix;
-                    material.Shader.SetUniformMatrix4("projection", false, ref projectionMatrix);
-
-                    var mvp = modelMatrix * viewMatrix * projectionMatrix;
-                    material.Shader.SetUniformMatrix4("mvp", false, ref mvp);
-
-                    if (material.Textures.Count > 0)
+                    for (int i = 0; i < material.Textures.Count; i++)
                     {
-                        for (int i = 0; i < material.Textures.Count; i++)
-                        {
-                            int index = (int)TextureUnit.Texture0;
-                            TextureUnit textureUnit = (TextureUnit)(index + i);
-                            GL.ActiveTexture(textureUnit);
+                        int index = (int)TextureUnit.Texture0;
+                        TextureUnit textureUnit = (TextureUnit)(index + i);
+                        GL.ActiveTexture(textureUnit);
 
-                            GL.BindTexture(TextureTarget.Texture2D, material.Textures[i].TextureID);
-                            material.Shader.SetUniform1(textureUnit.ToString(), i);
-                            material.Shader.SetUniform1("useTexture" + i.ToString(), 1);
+                        GL.BindTexture(TextureTarget.Texture2D, material.Textures[i].TextureID);
+                        material.Shader.SetUniform1(textureUnit.ToString(), i);
+                        material.Shader.SetUniform1("useTexture" + i.ToString(), 1);
+                    }
+                }
+                else
+                {
+                    material.Shader.SetUniform1("useTexture0", -1);
+                } 
+                #endregion
+
+                foreach (var ba in BufferArrays)
+                {
+                    ba.Bind();
+
+                    foreach (var kvp in ba.Buffers)
+                    {
+                        if (material.Shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
+                        {
+                            int attributeID = material.Shader.AttributeIDs[kvp.Value.AttributeName];
+                            if (attributeID != -1)
+                            {
+                                GL.EnableVertexAttribArray(attributeID);
+                            }
                         }
+                        else
+                        {
+                            if (ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                            {
+                                ba.Buffers[GraphicsBufferBase.BufferType.Index].Bind();
+                            }
+                        }
+                    }
+
+                    if (ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                    {
+                        //GL.DrawElements<uint>(PrimitiveType.Triangles, 3, DrawElementsType.UnsignedInt, (Buffers[GraphicsBufferBase.BufferType.Index]as GraphicsBuffer<uint>).Datas.ToArray());
+                        GL.DrawElements(PrimitiveType.Triangles, ba.Buffers[GraphicsBufferBase.BufferType.Index].DataCount(), DrawElementsType.UnsignedInt, 0);// (Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>).Datas.ToArray());
                     }
                     else
                     {
-                        material.Shader.SetUniform1("useTexture0", -1);
+                        GL.DrawArrays(PrimitiveType.Triangles, 0, ba.Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount());
                     }
-                }
 
-                material.Shader.Render(BufferArrays.ToArray());
+                    foreach (var kvp in ba.Buffers)
+                    {
+                        if (material.Shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
+                        {
+                            int attributeID = material.Shader.AttributeIDs[kvp.Value.AttributeName];
+                            if (attributeID != -1)
+                            {
+                                GL.DisableVertexAttribArray(attributeID);
+                            }
+                        }
+                        {
+                            if (ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                            {
+                                ba.Buffers[GraphicsBufferBase.BufferType.Index].Unbind();
+                            }
+                        }
+                    }
+
+                    ba.Unbind();
+                }
 
                 material.Shader.Unuse();
             }
