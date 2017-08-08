@@ -43,8 +43,6 @@ namespace ArtificialNature
                 {
                     indices.AddData((uint)i);
                 }
-
-                Buffers[GraphicsBufferBase.BufferType.Index] = indices;
             }
         }
 
