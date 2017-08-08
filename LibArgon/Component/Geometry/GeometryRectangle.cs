@@ -21,6 +21,7 @@ namespace ArtificialNature
             var vboPosition = BufferArrays[0].CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
             var vboColor = BufferArrays[0].CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
             var vboUV = BufferArrays[0].CreateBuffer<Vector2>("vUV", GraphicsBufferBase.BufferType.UV);
+            //var indices = BufferArrays[0].CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
 
             vboPosition.AddData(new Vector3[] {
                 new Vector3(-0.4f, -0.4f, 0f), new Vector3(0.4f, -0.4f, 0f), new Vector3( 0.4f, 0.4f, 0f),
@@ -34,6 +35,8 @@ namespace ArtificialNature
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(1, 1),
                 new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1),
             });
+            //indices.AddData(0); indices.AddData(1); indices.AddData(2);
+            //indices.AddData(3); indices.AddData(4); indices.AddData(5);
         }
 
         ~GeometryRectangle()

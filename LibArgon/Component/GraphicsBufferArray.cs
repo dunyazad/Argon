@@ -31,6 +31,21 @@ namespace ArtificialNature
 
         public override void OnUpdate(double dt)
         {
+            if (!Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+            {
+                CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
+            }
+
+            var indices = Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>;
+            if (indices.DataCount() == 0)
+            {
+                for (int i = 0; i < Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount(); i++)
+                {
+                    indices.AddData((uint)i);
+                }
+
+                Buffers[GraphicsBufferBase.BufferType.Index] = indices;
+            }
         }
 
         public override void OnRender(SceneEntity entity)
@@ -63,7 +78,7 @@ namespace ArtificialNature
             if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
             {
                 //GL.DrawElements<uint>(PrimitiveType.Triangles, 3, DrawElementsType.UnsignedInt, (Buffers[GraphicsBufferBase.BufferType.Index]as GraphicsBuffer<uint>).Datas.ToArray());
-                GL.DrawElements(PrimitiveType.Triangles, Buffers[GraphicsBufferBase.BufferType.Index].DataCount(), DrawElementsType.UnsignedInt, 0);
+                GL.DrawElements(PrimitiveType.Triangles, Buffers[GraphicsBufferBase.BufferType.Index].DataCount(), DrawElementsType.UnsignedInt, 0);// (Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>).Datas.ToArray());
             }
             else
             {

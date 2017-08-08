@@ -34,6 +34,11 @@ namespace ArtificialNature
 
         public override void OnUpdate(double dt)
         {
+            foreach (var ba in BufferArrays)
+            {
+                ba.OnUpdate(dt);
+            }
+
             if (Dirty)
             {
                 foreach (var material in Materials)
