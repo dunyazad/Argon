@@ -18,9 +18,9 @@ namespace ArtificialNature
         public GeometryCircle(string name, float radius, uint segments)
             : base(name)
         {
-            var vboPosition = BufferArrays[0].CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
-            var vboColor = BufferArrays[0].CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
-            var indices = BufferArrays[0].CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
+            var vboPosition = CreateBuffer<Vector3>("vPosition", GraphicsBufferBase.BufferType.Vertex);
+            var vboColor = CreateBuffer<Vector4>("vColor", GraphicsBufferBase.BufferType.Color);
+            var indices = CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
 
             for (uint i = 0; i < segments; i++)
             {

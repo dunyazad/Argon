@@ -51,15 +51,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component\Geometry\GeometryCircle.cs" />
+    <Compile Include="Component\Geometry\GeometryRoundedRectangle.cs" />
     <Compile Include="Component\Material.cs" />
     <Compile Include="Component\GraphicsObject.cs" />
     <Compile Include="Component\Shader.cs" />
     <Compile Include="Component\GraphicsBuffer.cs" />
     <Compile Include="Component\Geometry\GeometryRectangle.cs" />
     <Compile Include="Component\Geometry\GeometryTriangle.cs" />
+    <Compile Include="Component\Text.cs" />
     <Compile Include="Component\Texture.cs" />
     <Compile Include="Core\Component.cs" />
-    <Compile Include="Component\GraphicsBufferArray.cs" />
     <Compile Include="Core\ObjectBase.cs" />
     <Compile Include="LibArgon.cs" />
     <Compile Include="Core\SceneObject.cs" />

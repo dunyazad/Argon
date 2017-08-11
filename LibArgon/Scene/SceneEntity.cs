@@ -153,6 +153,18 @@ namespace ArtificialNature
             }
         }
 
+        public Component GetComponent(string name)
+        {
+            foreach (var c in components)
+            {
+                if(c.Name == name)
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+
         public override void CleanUp()
         {
             foreach (var kvp in childEntities)
