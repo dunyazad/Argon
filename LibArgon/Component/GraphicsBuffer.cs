@@ -18,7 +18,7 @@ namespace ArtificialNature
         public enum BufferType { Vertex, Index, Normal, Color, UV, Other };
         protected BufferType bufferType = BufferType.Other;
 
-        public GraphicsBufferArray BufferArray { get; set; }
+        public GraphicsObject GraphicsObject { get; set; }
 
         public string AttributeName { get; set; }
         public abstract void BufferData(Shader shader);
@@ -28,10 +28,10 @@ namespace ArtificialNature
         public abstract void Bind();
         public abstract void Unbind();
 
-        public GraphicsBufferBase(GraphicsBufferArray bufferArray, string name, string attributeName, BufferType bufferType)
+        public GraphicsBufferBase(GraphicsObject graphicsObject, string name, string attributeName, BufferType bufferType)
             : base(name)
         {
-            BufferArray = bufferArray;
+            GraphicsObject = graphicsObject;
             AttributeName = attributeName;
             this.bufferType = bufferType;
         }
@@ -53,11 +53,9 @@ namespace ArtificialNature
 
         VertexAttribPointerType pointerType;
 
-        public GraphicsBuffer(GraphicsBufferArray bufferArray, string name, string attributeName, BufferType bufferType)
-            : base(bufferArray, name, attributeName, bufferType)
+        public GraphicsBuffer(GraphicsObject graphicsObject, string name, string attributeName, BufferType bufferType)
+            : base(graphicsObject, name, attributeName, bufferType)
         {
-            BufferArray = bufferArray;
-
             GL.GenBuffers(1, out vbo);
 
             if(typeof(T) == typeof(sbyte))

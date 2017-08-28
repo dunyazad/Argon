@@ -15,13 +15,16 @@ namespace ArtificialNature
 {
     public class GraphicsObject : Component
     {
-        public List<Material> Materials { get; set; } = new List<Material>();
+        protected int vao;
+        public Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase> Buffers { get; private set; } = new Dictionary<GraphicsBufferBase.BufferType, GraphicsBufferBase>();
 
-        public List<GraphicsBufferArray> BufferArrays = new List<GraphicsBufferArray>() { new GraphicsBufferArray("Default") };
+        public List<Material> Materials { get; set; } = new List<Material>();
 
         public GraphicsObject(string name)
             : base(name)
         {
+            vao = GL.GenVertexArray();
+
             var material = new Material("Default");
             Materials.Add(material);
 
@@ -34,20 +37,17 @@ namespace ArtificialNature
 
         public override void OnUpdate(double dt)
         {
-            foreach (var ba in BufferArrays)
+            if (!Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
             {
-                if (!ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
-                {
-                    ba.CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
-                }
+                CreateBuffer<uint>("index", GraphicsBufferBase.BufferType.Index);
+            }
 
-                var indices = ba.Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>;
-                if (indices.DataCount() == 0)
+            var indices = Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>;
+            if (indices.DataCount() == 0)
+            {
+                for (int i = 0; i < Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount(); i++)
                 {
-                    for (int i = 0; i < ba.Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount(); i++)
-                    {
-                        indices.AddData((uint)i);
-                    }
+                    indices.AddData((uint)i);
                 }
             }
 
@@ -57,15 +57,14 @@ namespace ArtificialNature
                 {
                     material.Shader.Use();
 
-                    foreach (var ba in BufferArrays)
+                    Bind();
+
+                    foreach (var kvp in Buffers)
                     {
-                        ba.Bind();
-                        foreach (var kvp in ba.Buffers)
-                        {
-                            kvp.Value.BufferData(material.Shader);
-                        }
-                        ba.Unbind();
+                        kvp.Value.BufferData(material.Shader);
                     }
+
+                    Unbind();
 
                     material.Shader.Unuse();
                 }
@@ -112,67 +111,88 @@ namespace ArtificialNature
                 else
                 {
                     material.Shader.SetUniform1("useTexture0", -1);
-                } 
+                }
                 #endregion
 
-                foreach (var ba in BufferArrays)
+                Bind();
+
+                foreach (var kvp in Buffers)
                 {
-                    ba.Bind();
-
-                    foreach (var kvp in ba.Buffers)
+                    if (material.Shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
                     {
-                        if (material.Shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
+                        int attributeID = material.Shader.AttributeIDs[kvp.Value.AttributeName];
+                        if (attributeID != -1)
                         {
-                            int attributeID = material.Shader.AttributeIDs[kvp.Value.AttributeName];
-                            if (attributeID != -1)
-                            {
-                                GL.EnableVertexAttribArray(attributeID);
-                            }
+                            GL.EnableVertexAttribArray(attributeID);
                         }
-                        else
-                        {
-                            if (ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
-                            {
-                                ba.Buffers[GraphicsBufferBase.BufferType.Index].Bind();
-                            }
-                        }
-                    }
-
-                    if (ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
-                    {
-                        //GL.DrawElements<uint>(PrimitiveType.Triangles, 3, DrawElementsType.UnsignedInt, (Buffers[GraphicsBufferBase.BufferType.Index]as GraphicsBuffer<uint>).Datas.ToArray());
-                        GL.DrawElements(PrimitiveType.Triangles, ba.Buffers[GraphicsBufferBase.BufferType.Index].DataCount(), DrawElementsType.UnsignedInt, 0);// (Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>).Datas.ToArray());
                     }
                     else
                     {
-                        GL.DrawArrays(PrimitiveType.Triangles, 0, ba.Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount());
-                    }
-
-                    foreach (var kvp in ba.Buffers)
-                    {
-                        if (material.Shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
+                        if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
                         {
-                            int attributeID = material.Shader.AttributeIDs[kvp.Value.AttributeName];
-                            if (attributeID != -1)
-                            {
-                                GL.DisableVertexAttribArray(attributeID);
-                            }
-                        }
-                        {
-                            if (ba.Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
-                            {
-                                ba.Buffers[GraphicsBufferBase.BufferType.Index].Unbind();
-                            }
+                            Buffers[GraphicsBufferBase.BufferType.Index].Bind();
                         }
                     }
-
-                    ba.Unbind();
                 }
+
+                if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                {
+                    //GL.DrawElements<uint>(PrimitiveType.Triangles, 3, DrawElementsType.UnsignedInt, (Buffers[GraphicsBufferBase.BufferType.Index]as GraphicsBuffer<uint>).Datas.ToArray());
+                    GL.DrawElements(PrimitiveType.Triangles, Buffers[GraphicsBufferBase.BufferType.Index].DataCount(), DrawElementsType.UnsignedInt, 0);// (Buffers[GraphicsBufferBase.BufferType.Index] as GraphicsBuffer<uint>).Datas.ToArray());
+                }
+                else
+                {
+                    GL.DrawArrays(PrimitiveType.Triangles, 0, Buffers[GraphicsBufferBase.BufferType.Vertex].DataCount());
+                }
+
+                foreach (var kvp in Buffers)
+                {
+                    if (material.Shader.AttributeIDs.ContainsKey(kvp.Value.AttributeName))
+                    {
+                        int attributeID = material.Shader.AttributeIDs[kvp.Value.AttributeName];
+                        if (attributeID != -1)
+                        {
+                            GL.DisableVertexAttribArray(attributeID);
+                        }
+                    }
+                    {
+                        if (Buffers.ContainsKey(GraphicsBufferBase.BufferType.Index))
+                        {
+                            Buffers[GraphicsBufferBase.BufferType.Index].Unbind();
+                        }
+                    }
+                }
+
+                Unbind();
 
                 material.Shader.Unuse();
             }
 
             Console.WriteLine("Geometry OnRender");
+        }
+
+        protected void Bind()
+        {
+            GL.BindVertexArray(vao);
+        }
+
+        protected void Unbind()
+        {
+            GL.BindVertexArray(0);
+        }
+
+        public GraphicsBuffer<T> CreateBuffer<T>(string attributeName, GraphicsBufferBase.BufferType bufferType) where T : struct
+        {
+            if (Buffers.ContainsKey(bufferType))
+            {
+                return Buffers[bufferType] as GraphicsBuffer<T>;
+            }
+            else
+            {
+                var vbo = new GraphicsBuffer<T>(this, bufferType.ToString(), attributeName, bufferType);
+                Buffers.Add(bufferType, vbo);
+                return vbo;
+            }
         }
 
         public override void CleanUp()
@@ -183,6 +203,15 @@ namespace ArtificialNature
             }
 
             Materials.Clear();
+
+            foreach (var kvp in Buffers)
+            {
+                kvp.Value.CleanUp();
+            }
+
+            Buffers.Clear();
+
+            GL.DeleteVertexArray(vao);
         }
     }
 }

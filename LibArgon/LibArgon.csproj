@@ -59,7 +59,6 @@
     <Compile Include="Component\Geometry\GeometryTriangle.cs" />
     <Compile Include="Component\Texture.cs" />
     <Compile Include="Core\Component.cs" />
-    <Compile Include="Component\GraphicsBufferArray.cs" />
     <Compile Include="Core\ObjectBase.cs" />
     <Compile Include="LibArgon.cs" />
     <Compile Include="Core\SceneObject.cs" />
