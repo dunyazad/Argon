@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Linq;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
@@ -167,6 +168,19 @@ namespace ArtificialNature
             }
         }
 
+        public void SetData(int at, T data)
+        {
+            Datas[at] = data;
+        }
+
+        public void FillData(T data)
+        {
+            for (int i = 0; i < Datas.Count; i++)
+            {
+                Datas[i] = data;
+            }
+        }
+
         public void AddData(T data)
         {
             Datas.Add(data);
@@ -175,6 +189,11 @@ namespace ArtificialNature
         public void AddData(T[] datas)
         {
             this.Datas.AddRange(datas);
+        }
+
+        public void ClearData()
+        {
+            this.Datas.Clear();
         }
 
         public override void BufferData(Shader shader)
